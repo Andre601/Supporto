@@ -21,7 +21,7 @@
                     <finalName>Suggesto</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>com.andre601.suggesto.SuggestoBotMain</mainClass>
+                            <mainClass>com.andre601.suggesto.SuggestoBot</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -45,7 +45,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.andre601.suggesto.SuggestoBotMain</mainClass>
+                            <mainClass>com.andre601.suggesto.SuggestoBot</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -131,29 +131,12 @@
             <artifactId>unirest-java</artifactId>
             <version>1.4.9</version>
         </dependency>
+        <!-- JDA-Command -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.12</version>
-            <scope>provided</scope>
+            <groupId>com.github.Comportment</groupId>
+            <artifactId>JDA-Command</artifactId>
+            <version>1.0.7</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.10.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.10.0</version>
-        </dependency>
-        <!--
-        <dependency>
-            <groupId>com.github.DiscordBotList</groupId>
-            <artifactId>DBL-Java-Wrapper</artifactId>
-            <version>LATEST</version>
-        </dependency>
-        -->
     </dependencies>
 
 

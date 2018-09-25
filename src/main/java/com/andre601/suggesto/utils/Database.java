@@ -3,6 +3,7 @@ package com.andre601.suggesto.utils;
 import com.rethinkdb.RethinkDB;
 import com.rethinkdb.net.Connection;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Message;
 
 import java.util.Map;
 
@@ -18,17 +19,16 @@ public class Database {
 
     private static String guildTable = "guilds";
     private static String ticketsTable = "tickets";
-    private static String suggestionTable = "suggestions";
+    private static String statsTable = "stats";
 
     public static void createDB(Guild g){
         r.table(guildTable).insert(
                 r.array(
                         r.hashMap("id", g.getId())
                                 .with("ticket_id", 1)
-                                .with("suggestion_id", 1)
                                 .with("ticket_channel", "none")
                                 .with("ticket_category", "none")
-                                .with("suggestion_channel", "none")
+                                .with("ticket_enabled", "yes")
                                 .with("prefix", "t_")
                 )
         ).optArg("conflict", "update").run(conn);
@@ -38,43 +38,30 @@ public class Database {
         return r.table(guildTable).get(g.getId()).run(conn);
     }
 
-    public static Integer getTicketID(Guild g){
-        Map guild = getGuild(g);
-        String id = guild.get("ticket_id").toString();
-        updateTicketID(g);
-        return Integer.valueOf(id);
+    public static Long getTicketID(Guild guild){
+        Map g = getGuild(guild);
+        long id = Long.valueOf(g.get("ticket_id").toString());
+        updateTicketID(guild, id);
+        return id;
     }
 
-    public static Integer getSuggestionID(Guild g){
-        Map guild = getGuild(g);
-        String id = guild.get("suggestion_id").toString();
-        updateSuggestionID(g);
-        return Integer.valueOf(id);
-    }
-
-    public static void saveTicket(Guild g, String msgID, String author){
+    public static void saveTicket(Guild guild, String msgID, String ChannelID, String author){
+        long id = getTicketID(guild);
         r.table(ticketsTable).insert(
                 r.array(
-                        r.hashMap("uuid", g.getId() + "-" + getTicketID(g))
+                        r.hashMap("uuid", ChannelID)
                                 .with("message_id", msgID)
                                 .with("author_id", author)
+                                .with("ticket_id", id)
                 )
         ).optArg("conflict", "update").run(conn);
-        updateTicketID(g);
     }
 
-    private static void updateTicketID(Guild g){
-        int ticketID = getTicketID(g);
+    private static void updateTicketID(Guild guild, Long id){
+        long ticketID = id;
         ticketID++;
 
-        r.table(guildTable).update(r.hashMap("ticket_id", String.valueOf(ticketID))).run(conn);
-    }
-
-    private static void updateSuggestionID(Guild g){
-        int suggestionID = getSuggestionID(g);
-        suggestionID++;
-
-        r.table(guildTable).update(r.hashMap("suggestion_id", String.valueOf(suggestionID))).run(conn);
+        r.table(guildTable).get(guild).update(r.hashMap("ticket_id", ticketID)).run(conn);
     }
 
     public static String getPrefix(Guild g){
@@ -82,14 +69,33 @@ public class Database {
         return guild.get("prefix").toString();
     }
 
+    public static void setPrefix(Guild guild, String prefix){
+        r.table(guildTable).get(guild.getId()).update(r.hashMap("prefix", prefix)).run(conn);
+    }
+
+    public static boolean hasPrefix(Message msg, Guild guild){
+        if(msg.getContentRaw().startsWith(getPrefix(guild)))
+            return true;
+
+        return msg.getContentRaw().startsWith(guild.getSelfMember().getAsMention());
+    }
+
     public static String getSupportChannel(Guild g){
         Map guild = getGuild(g);
         return guild.get("ticket_channel").toString();
     }
 
-    public static String getSuggestionChannel(Guild g){
+    public static void setSupportChannel(Guild guild, String id){
+        r.table(guildTable).get(guild.getId()).update(r.hashMap("ticket_channel", id)).run(conn);
+    }
+
+    public static String getCategory(Guild g){
         Map guild = getGuild(g);
-        return guild.get("suggestion_channel").toString();
+        return guild.get("ticket_category").toString();
+    }
+
+    public static void setCategory(Guild guild, String id){
+        r.table(guildTable).get(guild.getId()).update(r.hashMap("ticket_category", id)).run(conn);
     }
 
     public static boolean hasCategory(Guild g){
@@ -97,8 +103,24 @@ public class Database {
         return !guild.get("ticket_category").equals("none");
     }
 
-    public static String getCategory(Guild g){
+    public static boolean ticketEbabled(Guild g){
         Map guild = getGuild(g);
-        return guild.get("ticket_category").toString();
+        return guild.get("ticket_enabled").equals("yes");
+    }
+
+    public static boolean suggestionEbabled(Guild g){
+        Map guild = getGuild(g);
+        return guild.get("suggestion_enabled").equals("yes");
+    }
+
+    public static long getTotalTickets(){
+        return r.table(statsTable).get("tickets").run(conn);
+    }
+
+    public static void updateTotalTickets(){
+        long tickets = r.table(statsTable).get("tickets").run(conn);
+        tickets++;
+
+        r.table(statsTable).update(r.hashMap("tickets", tickets)).run(conn);
     }
 }

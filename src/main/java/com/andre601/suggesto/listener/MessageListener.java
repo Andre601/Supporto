@@ -1,5 +1,8 @@
 package com.andre601.suggesto.listener;
 
+import com.andre601.suggesto.utils.Database;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
@@ -9,13 +12,13 @@ import java.util.stream.Stream;
 
 public class MessageListener extends ListenerAdapter {
 
-    public void onMessageReceived(MessageReceivedEvent e){
+    public void onMessageReceived(MessageReceivedEvent event){
+        TextChannel tc = event.getTextChannel();
+        Guild guild = event.getGuild();
 
+        if(!tc.getId().equals(Database.getSupportChannel(guild))) return;
 
-        List<String> content = new ArrayList<>();
-        Stream.of("[issue]", "[description]", "[link]").forEach(content::add);
-
-
+        String msg = event.getMessage().getContentRaw();
     }
 
 }
