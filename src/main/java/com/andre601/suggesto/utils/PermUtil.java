@@ -1,9 +1,7 @@
 package com.andre601.suggesto.utils;
 
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.utils.PermissionUtil;
 
 public class PermUtil {
@@ -11,6 +9,10 @@ public class PermUtil {
     //  Check for MESSAGE_MANAGE permission (For pinning messages, deleting messages, ect.)
     public static boolean canManageMsg(TextChannel tc){
         return PermissionUtil.checkPermission(tc, tc.getGuild().getSelfMember(), Permission.MESSAGE_MANAGE);
+    }
+
+    public static boolean canManageChannels(TextChannel tc){
+        return PermissionUtil.checkPermission(tc, tc.getGuild().getSelfMember(), Permission.MANAGE_CHANNEL);
     }
 
     public static boolean isBot(Message msg){
@@ -47,5 +49,9 @@ public class PermUtil {
 
     public static boolean isAdmin(Message msg){
         return PermissionUtil.checkPermission(msg.getTextChannel(), msg.getMember(), Permission.MANAGE_SERVER);
+    }
+
+    public static boolean isAdmin(TextChannel tc, Member member){
+        return PermissionUtil.checkPermission(tc, member, Permission.MANAGE_SERVER);
     }
 }

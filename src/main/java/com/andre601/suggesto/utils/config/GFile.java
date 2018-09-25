@@ -35,7 +35,7 @@ public class GFile {
 
         try{
             if(!file.exists()){
-                if(externalSplit.length == 2 && externalSplit[0].equals(".") || (externalSplit.length >= 3 &&
+                if((externalSplit.length == 2 && !externalSplit[0].equals(".")) || (externalSplit.length >= 3 &&
                 externalSplit[0].equals("."))){
                     if(!file.getParentFile().mkdirs()){
                         getLogger().error("Failed to create directory " + externalSplit[0]);

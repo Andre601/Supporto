@@ -61,14 +61,14 @@ public class CmdSettings implements Command {
         EmbedBuilder settings = EmbedUtil.getEmbed(msg.getAuthor())
                 .setTitle("Guild-Settings")
                 .setDescription(MessageFormat.format(
-                        "This are the current settings of the guild.\n" +
-                                "\n" +
-                                "**Prefix**: {0}\n" +
-                                "\n" +
-                                "**Support-channel**: {1}\n" +
-                                "**Support-category**: {2}\n" +
-                                "\n" +
-                                "Type `{0}help settings` to get info on how to change settings.",
+                    "This are the current settings of the guild.\n" +
+                            "\n" +
+                            "**Prefix**: `{0}`\n" +
+                            "\n" +
+                            "**Support-channel**: {1}\n" +
+                            "**Support-category**: {2}\n" +
+                            "\n" +
+                            "Type `{0}help settings` to get info on how to change settings.",
                         Database.getPrefix(msg.getGuild()),
                         (support == null ? "`No channel set`" : support.getAsMention()),
                         (category == null ? "`No category set`" : category.getName())

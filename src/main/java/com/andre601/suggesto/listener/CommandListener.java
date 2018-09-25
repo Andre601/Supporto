@@ -25,6 +25,17 @@ public class CommandListener extends ListenerAdapter {
 
     private final CommandHandler HANDLER;
 
+    private TextChannel getSupportChannel(Guild guild){
+        TextChannel channel;
+        try{
+            channel = guild.getTextChannelById(Database.getSupportChannel(guild));
+        }catch (Exception ex){
+            channel = null;
+        }
+
+        return channel;
+    }
+
     public CommandListener(CommandHandler handler){
         this.HANDLER = handler;
     }
@@ -44,7 +55,9 @@ public class CommandListener extends ListenerAdapter {
                     if(PermUtil.isDM(msg)) return;
 
                     TextChannel tc = event.getTextChannel();
-                    if(tc.getId().equals(Database.getSupportChannel(guild))) return;
+                    TextChannel support = getSupportChannel(guild);
+                    if(support != null)
+                        if(tc == support) return;
 
                     String prefix = Database.getPrefix(guild);
                     String raw = msg.getContentRaw();
