@@ -28,7 +28,7 @@ public class PermUtil {
     }
 
     public static boolean isOwner(Message msg){
-        return msg.getAuthor().getId().equals("");
+        return msg.getAuthor().getId().equals("204232208049766400");
     }
 
     public static boolean canSendMsg(TextChannel tc){
@@ -53,5 +53,9 @@ public class PermUtil {
 
     public static boolean isAdmin(TextChannel tc, Member member){
         return PermissionUtil.checkPermission(tc, member, Permission.MANAGE_SERVER);
+    }
+
+    public static boolean isStaff(Member member, Role role){
+        return member.getRoles().contains(role);
     }
 }

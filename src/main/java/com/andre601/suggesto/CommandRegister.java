@@ -1,6 +1,11 @@
 package com.andre601.suggesto;
 
-import com.andre601.suggesto.commands.CmdSettings;
+import com.andre601.suggesto.commands.bot.CmdHelp;
+import com.andre601.suggesto.commands.bot.CmdInvite;
+import com.andre601.suggesto.commands.bot.CmdStats;
+import com.andre601.suggesto.commands.guild.CmdGuild;
+import com.andre601.suggesto.commands.guild.CmdSettings;
+import com.andre601.suggesto.commands.owner.CmdShutdown;
 import me.diax.comportment.jdacommand.Command;
 
 import java.util.Arrays;
@@ -13,7 +18,15 @@ public class CommandRegister {
 
     CommandRegister(){
         register(
-                new CmdSettings()
+                // Bot
+                new CmdHelp(),
+                new CmdInvite(),
+                new CmdStats(),
+                // Guild
+                new CmdGuild(),
+                new CmdSettings(),
+                // Owner
+                new CmdShutdown()
         );
     }
 

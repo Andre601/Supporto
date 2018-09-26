@@ -13,8 +13,11 @@ public class LinkUtil {
                 Permission.MESSAGE_EMBED_LINKS,
                 Permission.MESSAGE_READ,
                 Permission.MESSAGE_WRITE,
-                Permission.MESSAGE_HISTORY
+                Permission.MESSAGE_HISTORY,
+                Permission.MESSAGE_ADD_REACTION
         );
     }
+
+    public static String guild_invite = "https://discord.gg/W79Pbaw";
 
 }

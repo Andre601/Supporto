@@ -3,14 +3,40 @@ package com.andre601.suggesto.utils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.requests.RestAction;
 
 import java.text.MessageFormat;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TicketUtil {
+
+    private static Role getStaffRole(Guild guild){
+        Role role;
+        try{
+            role = guild.getRoleById(Database.getRoleID(guild));
+        }catch (Exception ex){
+            role = null;
+        }
+
+        return role;
+    }
+
+    private static TextChannel getTicketChannel(Guild guild, String channelID){
+        TextChannel channel;
+        try{
+            channel = guild.getTextChannelById(channelID);
+        }catch (Exception ex){
+            channel = null;
+        }
+
+        return channel;
+    }
 
     public static void createTicket(Guild guild, TextChannel tc, Category category, Member author, String msg){
 
         Long ticketID = Database.getTicketID(guild);
+        Role role = getStaffRole(guild);
 
         TextChannel support;
         try {
@@ -50,11 +76,7 @@ public class TicketUtil {
                         "Ticket #{0}",
                         ticketID
                 ))
-                .addField("Creator:", MessageFormat.format(
-                        "{0} (`{1}`)",
-                        MessageUtil.getName(author),
-                        author.getUser().getId()
-                ), false)
+                .addField("Creator:", author.getAsMention(), false)
                 .addField("Message:", MessageFormat.format(
                         "```\n" +
                         "{0}\n" +
@@ -62,10 +84,10 @@ public class TicketUtil {
                         msg
                 ), false)
                 .addField("Close ticket:", MessageFormat.format(
-                        "Only the creator of the ticket ({0}) or users with `manage server` permission can " +
+                        "Only the creator of the ticket{0}or users with `manage server` permission can " +
                         "close this ticket.\n" +
                         "To close a ticket, click on the ✅ reaction of this message!",
-                        MessageUtil.getTag(author.getUser())
+                        (role == null ? " " : ", users with " + role.getAsMention() + " ")
                 ),false);
 
         support.sendMessage(author.getAsMention()).embed(ticket.build()).queue(message -> {
@@ -76,7 +98,26 @@ public class TicketUtil {
     }
 
     public static void closeTicket(Guild guild, String channelID){
-        guild.getTextChannelById(channelID).delete().queue();
+        TextChannel ticket = getTicketChannel(guild, channelID);
+
+        if(ticket == null) return;
+
+        EmbedBuilder info = EmbedUtil.getEmbed().setDescription(MessageFormat.format(
+                "Your ticket `{0}` in `{1}` was closed.",
+                ticket.getName(),
+                guild.getName()
+        ));
+
+        MessageHistory history = ticket.getHistory();
+        while(history.retrievePast(100).complete().size() > 0);
+
+        List<User> users = history.getRetrievedHistory().stream().map(Message::getAuthor).filter(user -> !user.isBot())
+                .distinct().collect(Collectors.toList());
+
+        users.stream().filter(user -> !user.isFake()).map(User::openPrivateChannel).map(RestAction::complete)
+                .forEach(pm -> pm.sendMessage(info.build()).queue());
+
+        ticket.delete().queue();
         Database.deleteTicket(channelID);
     }
 

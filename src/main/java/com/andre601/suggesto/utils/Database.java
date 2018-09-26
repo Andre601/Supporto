@@ -5,6 +5,7 @@ import com.rethinkdb.net.Connection;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 
+import java.lang.management.ManagementFactory;
 import java.util.Map;
 
 public class Database {
@@ -29,6 +30,7 @@ public class Database {
                                 .with("ticket_channel", "none")
                                 .with("ticket_category", "none")
                                 .with("prefix", "t_")
+                                .with("staff_role", "none")
                 )
         ).optArg("conflict", "update").run(conn);
     }
@@ -48,6 +50,15 @@ public class Database {
         return id;
     }
 
+    public static String getRoleID(Guild guild){
+        Map g = getGuild(guild);
+        return g.get("staff_role").toString();
+    }
+
+    public static void setRole(Guild guild, String roleID){
+        r.table(guildTable).get(guild.getId()).update(r.hashMap("staff_role", roleID)).run(conn);
+    }
+
     public static void saveTicket(String ChannelID, String msgID, String authorID, Long ticketID){
         r.table(ticketsTable).insert(
                 r.array(
@@ -61,6 +72,11 @@ public class Database {
 
     private static Map<String, Object> getTicket(String channelID){
         return r.table(ticketsTable).get(channelID).run(conn);
+    }
+
+    public static Long getCurrTicketID(String channelID){
+        Map ticket = getTicket(channelID);
+        return Long.valueOf(ticket.get("ticket_id").toString());
     }
 
     private static void updateTicketID(Guild guild, Long id){

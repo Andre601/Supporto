@@ -1,4 +1,4 @@
-package com.andre601.suggesto.commands;
+package com.andre601.suggesto.commands.guild;
 
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
@@ -14,9 +14,14 @@ import java.util.List;
 
 @CommandDescription(
         name = "Settings",
-        description = "Change settings of the bot.",
+        description =
+                "Change settings of the bot.\n" +
+                "`prefix <set prefix|reset>` to set or reset the prefix.\n" +
+                "`channel <set #channel|reset>` to set or reset the channel.\n" +
+                "`category <set categoryID|reset>` to set or reset the category.\n" +
+                "`role <set roleID|reset>` to set or reset the role.",
         triggers = {"settings", "options"},
-        attributes = {@CommandAttribute(key = "manageServer")}
+        attributes = {@CommandAttribute(key = "manageServer"), @CommandAttribute(key = "guild")}
 )
 public class CmdSettings implements Command {
 
@@ -53,10 +58,33 @@ public class CmdSettings implements Command {
         return category;
     }
 
+    private Role getStaffRole(Guild guild, String id){
+        Role role;
+        try{
+            role = guild.getRoleById(id);
+        }catch (Exception ex){
+            role = null;
+        }
+
+        return role;
+    }
+
+    private static Role getStaffRole(Guild guild){
+        Role role;
+        try{
+            role = guild.getRoleById(Database.getRoleID(guild));
+        }catch (Exception ex){
+            role = null;
+        }
+
+        return role;
+    }
+
     private void sendUsage(Message msg){
         TextChannel tc = msg.getTextChannel();
         TextChannel support = getSupportChannel(msg.getGuild());
         Category category = getSupportCategory(msg.getGuild());
+        Role role = getStaffRole(msg.getGuild());
 
         EmbedBuilder settings = EmbedUtil.getEmbed(msg.getAuthor())
                 .setTitle("Guild-Settings")
@@ -67,11 +95,13 @@ public class CmdSettings implements Command {
                             "\n" +
                             "**Support-channel**: {1}\n" +
                             "**Support-category**: {2}\n" +
+                            "**Staff-role**: {3}\n" +
                             "\n" +
                             "Type `{0}help settings` to get info on how to change settings.",
                         Database.getPrefix(msg.getGuild()),
                         (support == null ? "`No channel set`" : support.getAsMention()),
-                        (category == null ? "`No category set`" : category.getName())
+                        (category == null ? "`No category set`" : category.getName()),
+                        (role == null ? "`No role set`" : role.getAsMention())
                 ));
 
         tc.sendMessage(settings.build()).queue();
@@ -211,6 +241,53 @@ public class CmdSettings implements Command {
                 }else{
                     tc.sendMessage(MessageFormat.format(
                             "{0} Please use `set <categoryID>` or `reset` to change the category!",
+                            msg.getAuthor().getAsMention()
+                    )).queue();
+                }
+                break;
+
+            case "role":
+                if(args.length == 1){
+                    tc.sendMessage(MessageFormat.format(
+                            "{0} Please use `set <roleID>` or `reset` to change the role!",
+                            msg.getAuthor().getAsMention()
+                    )).queue();
+                    return;
+                }
+                if(args[1].equalsIgnoreCase("set")){
+                    if(args.length >= 3){
+                        Role role = getStaffRole(guild, args[2].trim());
+                        if(role == null){
+                            tc.sendMessage(MessageFormat.format(
+                                    "{0} The provided role-ID was invalid!",
+                                    msg.getAuthor().getAsMention()
+                            )).queue();
+                            return;
+                        }
+                        Database.setRole(guild, role.getId());
+                        EmbedBuilder success = EmbedUtil.getEmbed()
+                                .setColor(Color.GREEN)
+                                .setDescription(MessageFormat.format(
+                                        "Role set to {0}",
+                                        role.getAsMention()
+                                ));
+                        tc.sendMessage(success.build()).queue();
+                    }else{
+                        tc.sendMessage(MessageFormat.format(
+                                "{0} You need to provide a roleID!",
+                                msg.getAuthor().getAsMention()
+                        )).queue();
+                    }
+                }else
+                if(args[1].equalsIgnoreCase("reset")){
+                    Database.setRole(guild, "none");
+                    EmbedBuilder success = EmbedUtil.getEmbed()
+                            .setColor(Color.GREEN)
+                            .setDescription("Role reseted");
+                    tc.sendMessage(success.build()).queue();
+                }else{
+                    tc.sendMessage(MessageFormat.format(
+                            "{0} Please use `set <roleID>` or `reset` to change the role!",
                             msg.getAuthor().getAsMention()
                     )).queue();
                 }

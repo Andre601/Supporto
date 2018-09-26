@@ -28,7 +28,7 @@ public class SuggestoBot {
 
     private static GFile file = new GFile();
 
-    private static final CommandHandler COMMAND_HANDLER = new CommandHandler();
+    public static final CommandHandler COMMAND_HANDLER = new CommandHandler();
     private static ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     public static void main(String[] args) throws Exception{

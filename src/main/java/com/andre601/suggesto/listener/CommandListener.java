@@ -2,10 +2,11 @@ package com.andre601.suggesto.listener;
 
 import com.andre601.suggesto.SuggestoBot;
 import com.andre601.suggesto.utils.Database;
+import com.andre601.suggesto.utils.EmbedUtil;
 import com.andre601.suggesto.utils.PermUtil;
 import me.diax.comportment.jdacommand.Command;
 import me.diax.comportment.jdacommand.CommandHandler;
-import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -61,12 +62,17 @@ public class CommandListener extends ListenerAdapter {
 
                     String prefix = Database.getPrefix(guild);
                     String raw = msg.getContentRaw();
+                    if(!PermUtil.canEmbedLinks(tc)) {
+                        tc.sendMessage("{0} I need permission to embed links in this channel!").queue();
+                        return;
+                    }
+                    EmbedBuilder prefixInfo = EmbedUtil.getEmbed()
+                            .setDescription(MessageFormat.format(
+                                    "My prefix on this guild is `{0}`!",
+                                    prefix
+                            ));
                     if(raw.equalsIgnoreCase(guild.getSelfMember().getAsMention())){
-                        tc.sendMessage(MessageFormat.format(
-                                "{0} My prefix in this guild is `{1}`!",
-                                msg.getAuthor().getAsMention(),
-                                prefix
-                        )).queue();
+                        tc.sendMessage(prefixInfo.build()).queue();
                         return;
                     }
 
@@ -85,31 +91,23 @@ public class CommandListener extends ListenerAdapter {
                     }
                     Command command = HANDLER.findCommand(commandString.toLowerCase());
                     if(command == null) return;
-                    if(command.hasAttribute("Owner") && !PermUtil.isOwner(msg)) return;
+                    if(command.hasAttribute("owner") && !PermUtil.isOwner(msg)) return;
                     if(!PermUtil.canSeeChannel(tc)) return;
                     if(!PermUtil.canSeeHistory(tc)) return;
                     if(!PermUtil.canSendMsg(tc)) return;
                     if(command.hasAttribute("manageServer") && !PermUtil.isAdmin(msg)){
-                        tc.sendMessage(MessageFormat.format(
-                                "{0} You need the permission `manage server` for this command!",
-                                msg.getAuthor().getAsMention()
-                        )).queue();
+                        EmbedUtil.sendError(msg,"You need the permission `manage server` for this command!");
                         return;
                     }
                     if(!PermUtil.canManageMsg(tc)){
+                        EmbedUtil.sendError(msg, "I need permission to manage Messages!");
                         tc.sendMessage("I need permission to manage Messages!").queue();
-                        return;
-                    }
-                    if(!PermUtil.canEmbedLinks(tc)) {
-                        tc.sendMessage(MessageFormat.format(
-                                "{0} I need permission to embed links in this channel!",
-                                msg.getAuthor().getAsMention()
-                        )).queue();
                         return;
                     }
 
                     try {
                         HANDLER.execute(command, msg, split.length > 1 ? split[1] : "");
+                        msg.delete().queue();
                     }catch (Exception ex){
                         SuggestoBot.getLogger().error("Error in command", ex);
                     }
