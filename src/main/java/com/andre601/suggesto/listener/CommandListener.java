@@ -63,7 +63,10 @@ public class CommandListener extends ListenerAdapter {
                     String prefix = Database.getPrefix(guild);
                     String raw = msg.getContentRaw();
                     if(!PermUtil.canEmbedLinks(tc)) {
-                        tc.sendMessage("{0} I need permission to embed links in this channel!").queue();
+                        tc.sendMessage(MessageFormat.format(
+                                "{0} I need permission to embed links in this channel!",
+                                msg.getAuthor().getAsMention()
+                        )).queue();
                         return;
                     }
                     EmbedBuilder prefixInfo = EmbedUtil.getEmbed()

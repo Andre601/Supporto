@@ -3,7 +3,6 @@ package com.andre601.suggesto.commands.bot;
 import com.andre601.suggesto.SuggestoBot;
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
-import com.andre601.suggesto.utils.PermUtil;
 import me.diax.comportment.jdacommand.Command;
 import me.diax.comportment.jdacommand.CommandAttribute;
 import me.diax.comportment.jdacommand.CommandDescription;

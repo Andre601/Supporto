@@ -122,10 +122,10 @@ public class CmdSettings implements Command {
         switch (args[0].toLowerCase()){
             case "prefix":
                 if(args.length == 1){
-                    tc.sendMessage(MessageFormat.format(
-                            "{0} Please use `set <prefix>` or `reset` to change the prefix!",
-                            msg.getAuthor().getAsMention()
-                    )).queue();
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please use `set <prefix>` or `reset` to change or reset the prefix!"
+                    );
                     return;
                 }
                 if(args[1].equalsIgnoreCase("set")){
@@ -139,10 +139,7 @@ public class CmdSettings implements Command {
                                 ));
                         tc.sendMessage(success.build()).queue();
                     }else{
-                        tc.sendMessage(MessageFormat.format(
-                                "{0} You need to provide a prefix!",
-                                msg.getAuthor().getAsMention()
-                        )).queue();
+                        EmbedUtil.sendError(msg, "You need to provide a prefix!");
                     }
                 }else
                 if(args[1].equalsIgnoreCase("reset")){
@@ -152,19 +149,19 @@ public class CmdSettings implements Command {
                             .setDescription("Prefix reseted to `t_`");
                     tc.sendMessage(success.build()).queue();
                 }else{
-                    tc.sendMessage(MessageFormat.format(
-                            "{0} Please use `set <prefix>` or `reset` to change the prefix!",
-                            msg.getAuthor().getAsMention()
-                    )).queue();
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please use `set <prefix>` or `reset` to change or reset the prefix!"
+                    );
                 }
                 break;
 
             case "channel":
                 if(args.length == 1){
-                    tc.sendMessage(MessageFormat.format(
-                            "{0} Please use `set <#channel>` or `reset` to change the channel!",
-                            msg.getAuthor().getAsMention()
-                    )).queue();
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please use `set <#channel>` or `reset` to change or reset the channel!"
+                    );
                     return;
                 }
                 if(args[1].equalsIgnoreCase("set")){
@@ -179,10 +176,10 @@ public class CmdSettings implements Command {
                                 ));
                         tc.sendMessage(success.build()).queue();
                     }else{
-                        tc.sendMessage(MessageFormat.format(
-                                "{0} You need to provide a channel!",
-                                msg.getAuthor().getAsMention()
-                        )).queue();
+                        EmbedUtil.sendError(
+                                msg,
+                                "You need to mention a channel!"
+                        );
                     }
                 }else
                 if(args[1].equalsIgnoreCase("reset")){
@@ -192,29 +189,29 @@ public class CmdSettings implements Command {
                             .setDescription("Channel reseted");
                     tc.sendMessage(success.build()).queue();
                 }else{
-                    tc.sendMessage(MessageFormat.format(
-                            "{0} Please use `set <#channel>` or `reset` to change the channel!",
-                            msg.getAuthor().getAsMention()
-                    )).queue();
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please use `set <#channel>` or `reset` to change or reset the channel!"
+                    );
                 }
                 break;
 
             case "category":
                 if(args.length == 1){
-                    tc.sendMessage(MessageFormat.format(
-                            "{0} Please use `set <CategoryID>` or `reset` to change the category!",
-                            msg.getAuthor().getAsMention()
-                    )).queue();
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please use `set <categoryID>` or `reset` to change or reset the category!"
+                    );
                     return;
                 }
                 if(args[1].equalsIgnoreCase("set")){
                     if(args.length >= 3){
                         Category category = getSupportCategory(guild, args[2].trim());
                         if(category == null){
-                            tc.sendMessage(MessageFormat.format(
-                                    "{0} The provided Category-ID was invalid!",
-                                    msg.getAuthor().getAsMention()
-                            )).queue();
+                            EmbedUtil.sendError(
+                                    msg,
+                                    "The provided categoryID was invalid!"
+                            );
                             return;
                         }
                         Database.setCategory(guild, category.getId());
@@ -227,10 +224,10 @@ public class CmdSettings implements Command {
                                 ));
                         tc.sendMessage(success.build()).queue();
                     }else{
-                        tc.sendMessage(MessageFormat.format(
-                                "{0} You need to provide a category!",
-                                msg.getAuthor().getAsMention()
-                        )).queue();
+                        EmbedUtil.sendError(
+                                msg,
+                                "You need to provide a categoryID!"
+                        );
                     }
                 }else
                 if(args[1].equalsIgnoreCase("reset")){
@@ -240,29 +237,29 @@ public class CmdSettings implements Command {
                             .setDescription("Category reseted");
                     tc.sendMessage(success.build()).queue();
                 }else{
-                    tc.sendMessage(MessageFormat.format(
-                            "{0} Please use `set <categoryID>` or `reset` to change the category!",
-                            msg.getAuthor().getAsMention()
-                    )).queue();
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please use `set <categoryID>` or `reset` to change or reset the category!"
+                    );
                 }
                 break;
 
             case "role":
                 if(args.length == 1){
-                    tc.sendMessage(MessageFormat.format(
-                            "{0} Please use `set <roleID>` or `reset` to change the role!",
-                            msg.getAuthor().getAsMention()
-                    )).queue();
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please use `set <roleID>` or `reset` to change or reset the staff-role!"
+                    );
                     return;
                 }
                 if(args[1].equalsIgnoreCase("set")){
                     if(args.length >= 3){
                         Role role = getStaffRole(guild, args[2].trim());
                         if(role == null){
-                            tc.sendMessage(MessageFormat.format(
-                                    "{0} The provided role-ID was invalid!",
-                                    msg.getAuthor().getAsMention()
-                            )).queue();
+                            EmbedUtil.sendError(
+                                    msg,
+                                    "The provided roleID was invalid!"
+                            );
                             return;
                         }
                         Database.setRole(guild, role.getId());
@@ -274,10 +271,10 @@ public class CmdSettings implements Command {
                                 ));
                         tc.sendMessage(success.build()).queue();
                     }else{
-                        tc.sendMessage(MessageFormat.format(
-                                "{0} You need to provide a roleID!",
-                                msg.getAuthor().getAsMention()
-                        )).queue();
+                        EmbedUtil.sendError(
+                                msg,
+                                "You need to provide a roleID!"
+                        );
                     }
                 }else
                 if(args[1].equalsIgnoreCase("reset")){
@@ -287,10 +284,10 @@ public class CmdSettings implements Command {
                             .setDescription("Role reseted");
                     tc.sendMessage(success.build()).queue();
                 }else{
-                    tc.sendMessage(MessageFormat.format(
-                            "{0} Please use `set <roleID>` or `reset` to change the role!",
-                            msg.getAuthor().getAsMention()
-                    )).queue();
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please use `set <roleID>` or `reset` to change or reset the staff-role!"
+                    );
                 }
                 break;
 
