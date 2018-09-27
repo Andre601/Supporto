@@ -43,7 +43,7 @@ public class Database {
         return getGuild(guild) != null;
     }
 
-    public static Long getTicketID(Guild guild){
+    public static Long getNewTicketID(Guild guild){
         Map g = getGuild(guild);
         long id = Long.valueOf(g.get("ticket_id").toString());
         updateTicketID(guild, id);
@@ -74,9 +74,9 @@ public class Database {
         return r.table(ticketsTable).get(channelID).run(conn);
     }
 
-    public static Long getCurrTicketID(String channelID){
-        Map ticket = getTicket(channelID);
-        return Long.valueOf(ticket.get("ticket_id").toString());
+    public static Long getCurrTicketID(Guild guild){
+        Map g = getGuild(guild);
+        return Long.valueOf(g.get("ticket_id").toString()) - 1;
     }
 
     private static void updateTicketID(Guild guild, Long id){

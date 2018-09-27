@@ -16,6 +16,7 @@ import java.util.List;
         name = "Settings",
         description =
                 "Change settings of the bot.\n" +
+                "\n" +
                 "`prefix <set prefix|reset>` to set or reset the prefix.\n" +
                 "`channel <set #channel|reset>` to set or reset the channel.\n" +
                 "`category <set categoryID|reset>` to set or reset the category.\n" +

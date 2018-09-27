@@ -108,16 +108,16 @@ public class ChannelListener extends ListenerAdapter {
         Member member = event.getMember();
         if(!messageID.equals(Database.getMessageID(tc.getId()))) return;
         if(member.getUser().getId().equals(Database.getAuthorID(tc.getId()))) {
-            TicketUtil.closeTicket(guild, tc.getId());
+            TicketUtil.performClose(guild, member.getUser(), tc.getId());
             return;
         }
         if(PermUtil.isAdmin(tc, member)){
-            TicketUtil.closeTicket(guild, tc.getId());
+            TicketUtil.performClose(guild, member.getUser(), tc.getId());
             return;
         }
         if(role != null)
             if(PermUtil.isStaff(member, role))
-                TicketUtil.closeTicket(guild, tc.getId());
+                TicketUtil.performClose(guild, member.getUser(), tc.getId());
     }
 
 }

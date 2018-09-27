@@ -63,50 +63,24 @@ public class CmdHelp implements Command {
     public void execute(Message msg, String s) {
         Guild guild = msg.getGuild();
         TextChannel tc = msg.getTextChannel();
-        EmbedBuilder embedBuilder = EmbedUtil.getEmbed(msg.getAuthor());
 
         String prefix = Database.getPrefix(guild);
-        String gp = "\\" + prefix;
-
-        HashMap<String, StringBuilder> builders = new HashMap<String, StringBuilder>(){
-            {
-
-            }
-        };
-
-        for(Map.Entry<String, String> category : categories.entrySet()){
-            builders.put(category.getKey(), new StringBuilder());
-        }
-
-        for(Command cmd : SuggestoBot.COMMAND_HANDLER.getCommands()){
-            String category;
-
-            if(!cmd.hasAttribute("owner")){
-                category = builders.keySet().stream().filter(cmd::hasAttribute).findFirst().get();
-            }else{
-                category = "owner";
-            }
-
-            builders.get(category).append(String.format(
-                    "%s%s\n%s",
-                    gp,
-                    cmd.getDescription().name(),
-                    cmd.getDescription().description()
-            ));
-        }
-
-        for(Map.Entry<String, StringBuilder> builder : builders.entrySet()){
-            if(builder.getKey().equals("owner") && !PermUtil.isOwner(msg)){
-                continue;
-            }
-
-            embedBuilder.addField(categories.get(builder.getKey()),
-                    builder.getValue().toString(),
-                    false
-            );
-        }
-
-        MessageEmbed embed = embedBuilder.build();
+        EmbedBuilder embedBuilder = EmbedUtil.getEmbed(msg.getAuthor())
+                .setDescription(MessageFormat.format(
+                        "Type `{0}Help [command]` for more info about a command.",
+                        prefix
+                ))
+                .addField("Bot:", MessageFormat.format(
+                        "`{0}Help`\n" +
+                        "`{0}Invite`\n" +
+                        "`{0}Stats`",
+                        prefix
+                        ), false)
+                .addField("Guild:", MessageFormat.format(
+                        "`{0}Guild`\n" +
+                        "`{0}Settings`",
+                        prefix
+                ), false);
 
         if(s.length() != 0){
             Command command = SuggestoBot.COMMAND_HANDLER.findCommand(s.split(" ")[0]);
@@ -115,9 +89,9 @@ public class CmdHelp implements Command {
                 EmbedUtil.sendError(msg, "This command does not exist!");
                 return;
             }
-            tc.sendMessage(commandHelp(msg, command, gp)).queue();
+            tc.sendMessage(commandHelp(msg, command, prefix)).queue();
         }else{
-            tc.sendMessage(embed).queue();
+            tc.sendMessage(embedBuilder.build()).queue();
         }
     }
 }

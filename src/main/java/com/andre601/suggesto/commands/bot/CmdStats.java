@@ -1,10 +1,12 @@
 package com.andre601.suggesto.commands.bot;
 
+import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
 import me.diax.comportment.jdacommand.Command;
 import me.diax.comportment.jdacommand.CommandAttribute;
 import me.diax.comportment.jdacommand.CommandDescription;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 
@@ -46,6 +48,7 @@ public class CmdStats implements Command {
     @Override
     public void execute(Message msg, String s) {
         TextChannel tc = msg.getTextChannel();
+        Guild guild = msg.getGuild();
 
         EmbedBuilder stats = EmbedUtil.getEmbed(msg.getAuthor())
                 .addField("Uptime:", getUptime(), false)
@@ -64,6 +67,12 @@ public class CmdStats implements Command {
                         "**Total**: `{1}`",
                         msg.getJDA().getShardInfo().getShardId(),
                         getShards().getShardCache().size()
+                ), true)
+                .addField("Created tickets", MessageFormat.format(
+                        "**Total**: `{0}`\n" +
+                        "**This guild**: `{1}`",
+                        Database.getTotalTickets(),
+                        Database.getCurrTicketID(guild)
                 ), true);
 
         tc.sendMessage(stats.build()).queue();
