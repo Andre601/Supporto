@@ -29,7 +29,7 @@ You can provide a command after `Help` (f.e. `t_help settings`) to get info abou
 - link
 - links
 
-Gives you the links, to invite the bot, join the guild, or to this GitHub-repository here.
+Gives you the links, to invite the bot, join the guild, or to [the GitHub-repository](https://github.com/Andre601/Supporto).
 
 #### Stats
 **Aliases**:
