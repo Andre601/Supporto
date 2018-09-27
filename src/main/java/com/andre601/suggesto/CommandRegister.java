@@ -6,7 +6,7 @@ import com.andre601.suggesto.commands.bot.CmdStats;
 import com.andre601.suggesto.commands.guild.CmdGuild;
 import com.andre601.suggesto.commands.guild.CmdSettings;
 import com.andre601.suggesto.commands.owner.CmdShutdown;
-import me.diax.comportment.jdacommand.Command;
+import com.github.rainestormee.jdacommand.Command;
 
 import java.util.Arrays;
 import java.util.HashSet;

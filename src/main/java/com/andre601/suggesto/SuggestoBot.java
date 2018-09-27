@@ -8,7 +8,7 @@ import com.andre601.suggesto.listener.ReadyListener;
 import com.andre601.suggesto.utils.MessageUtil;
 import com.andre601.suggesto.utils.config.GFile;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import me.diax.comportment.jdacommand.CommandHandler;
+import com.github.rainestormee.jdacommand.CommandHandler;
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;

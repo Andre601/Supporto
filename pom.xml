@@ -133,9 +133,9 @@
         </dependency>
         <!-- JDA-Command -->
         <dependency>
-            <groupId>com.github.Comportment</groupId>
+            <groupId>com.github.rainestormee</groupId>
             <artifactId>JDA-Command</artifactId>
-            <version>1.0.7</version>
+            <version>1.1.2</version>
         </dependency>
     </dependencies>
 

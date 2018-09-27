@@ -3,9 +3,9 @@ package com.andre601.suggesto.commands.bot;
 import com.andre601.suggesto.SuggestoBot;
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
-import me.diax.comportment.jdacommand.Command;
-import me.diax.comportment.jdacommand.CommandAttribute;
-import me.diax.comportment.jdacommand.CommandDescription;
+import com.github.rainestormee.jdacommand.CommandDescription;
+import com.github.rainestormee.jdacommand.Command;
+import com.github.rainestormee.jdacommand.CommandAttribute;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
@@ -13,8 +13,6 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.TextChannel;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 @CommandDescription(
         name = "Help",
@@ -25,13 +23,6 @@ import java.util.Map;
         attributes = {@CommandAttribute(key = "bot")}
 )
 public class CmdHelp implements Command {
-
-    private HashMap<String, String> categories = new HashMap<String, String>(){
-        {
-            put("bot", "**Bot**");
-            put("guild", "**Guild**");
-        }
-    };
 
     private static MessageEmbed commandHelp(Message msg, Command cmd, String prefix){
         CommandDescription description = cmd.getDescription();

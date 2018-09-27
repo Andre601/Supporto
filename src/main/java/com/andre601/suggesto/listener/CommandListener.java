@@ -4,8 +4,8 @@ import com.andre601.suggesto.SuggestoBot;
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
 import com.andre601.suggesto.utils.PermUtil;
-import me.diax.comportment.jdacommand.Command;
-import me.diax.comportment.jdacommand.CommandHandler;
+import com.github.rainestormee.jdacommand.Command;
+import com.github.rainestormee.jdacommand.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
@@ -104,7 +104,6 @@ public class CommandListener extends ListenerAdapter {
                     }
                     if(!PermUtil.canManageMsg(tc)){
                         EmbedUtil.sendError(msg, "I need permission to manage Messages!");
-                        tc.sendMessage("I need permission to manage Messages!").queue();
                         return;
                     }
 

@@ -2,9 +2,9 @@ package com.andre601.suggesto.commands.bot;
 
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
-import me.diax.comportment.jdacommand.Command;
-import me.diax.comportment.jdacommand.CommandAttribute;
-import me.diax.comportment.jdacommand.CommandDescription;
+import com.github.rainestormee.jdacommand.Command;
+import com.github.rainestormee.jdacommand.CommandAttribute;
+import com.github.rainestormee.jdacommand.CommandDescription;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;

@@ -2,9 +2,9 @@ package com.andre601.suggesto.commands.guild;
 
 import com.andre601.suggesto.utils.EmbedUtil;
 import com.andre601.suggesto.utils.MessageUtil;
-import me.diax.comportment.jdacommand.Command;
-import me.diax.comportment.jdacommand.CommandAttribute;
-import me.diax.comportment.jdacommand.CommandDescription;
+import com.github.rainestormee.jdacommand.Command;
+import com.github.rainestormee.jdacommand.CommandAttribute;
+import com.github.rainestormee.jdacommand.CommandDescription;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
@@ -38,7 +38,11 @@ public class CmdGuild implements Command {
                         guild.getMembers().stream().filter(user -> !user.getUser().isBot()).count(),
                         guild.getMembers().stream().filter(user -> user.getUser().isBot()).count()
                 ), true)
-                .addField("Region", guild.getRegion().getEmoji(), true)
+                .addField("Region", MessageFormat.format(
+                        "{0} {1}",
+                        guild.getRegion().getEmoji(),
+                        guild.getRegion().getName()
+                ), true)
                 .addField("Level", guild.getVerificationLevel().name().toLowerCase(), true)
                 .addField("Owner", guild.getOwner().getAsMention(), true)
                 .addField("Created", MessageUtil.formatTime(LocalDateTime.from(guild.getCreationTime())), true);
