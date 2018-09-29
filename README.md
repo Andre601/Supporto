@@ -25,22 +25,22 @@ Shows you all available commands.
 You can provide a command after `Help` (f.e. `t_help settings`) to get info about the command.
 
 #### Info
-**Aliases**:
+**Alias**:
 - Information
 
 Gives basic info for the bot.
 
 #### Invite
 **Aliases**:
-- link
-- links
+- Link
+- Links
 
 Gives you the links, to invite the bot, join the guild, or to [the GitHub-repository](https://github.com/Andre601/Supporto).
 
 #### Stats
 **Aliases**:
-- stat
-- statistics
+- Stat
+- Statistics
 
 Gives you some statistics about the bot.
 
@@ -49,13 +49,13 @@ This commands are for either getting some guild-info, or for changing stuff.
 
 #### Guild
 **Alias**:
-- server
+- Server
 
 Shows general info about the guild.
 
 #### Settings
 **Alias**:
-- options
+- Options
 
 Lets you change different settings of the bot.  
 This command requires you to have the `manage server` permission!
