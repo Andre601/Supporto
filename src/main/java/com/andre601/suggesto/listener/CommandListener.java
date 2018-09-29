@@ -71,7 +71,7 @@ public class CommandListener extends ListenerAdapter {
                     }
                     EmbedBuilder prefixInfo = EmbedUtil.getEmbed()
                             .setDescription(MessageFormat.format(
-                                    "My prefix on this guild is `{0}`!",
+                                    "My prefix on this guild is `{0}`",
                                     prefix
                             ));
                     if(raw.equalsIgnoreCase(guild.getSelfMember().getAsMention())){

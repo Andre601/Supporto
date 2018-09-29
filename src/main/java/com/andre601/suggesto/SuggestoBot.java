@@ -12,6 +12,8 @@ import com.github.rainestormee.jdacommand.CommandHandler;
 import net.dv8tion.jda.bot.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.webhook.WebhookClient;
+import net.dv8tion.jda.webhook.WebhookClientBuilder;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Executors;
@@ -50,5 +52,13 @@ public class SuggestoBot {
 
     public static Logger getLogger(){
         return logger;
+    }
+
+    public static WebhookClient getWebhookClient(String url){
+        return new WebhookClientBuilder(url).build();
+    }
+
+    public static GFile getFile(){
+        return file;
     }
 }

@@ -3,9 +3,9 @@ package com.andre601.suggesto.utils;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
 
-public class LinkUtil {
+public final class LinkUtil {
 
-    public static String getInviteURL(JDA jda){
+    public static String INVITE_BOT(JDA jda){
         return jda.asBot().getInviteUrl(
                 Permission.MESSAGE_MANAGE,
                 Permission.MANAGE_CHANNEL,
@@ -18,6 +18,6 @@ public class LinkUtil {
         );
     }
 
-    public static String guild_invite = "https://discord.gg/W79Pbaw";
-
+    public static String INVITE_GUILD = "https://discord.gg/W79Pbaw";
+    public static String GITHUB       = "https://github.com/Andre601/Supporto";
 }

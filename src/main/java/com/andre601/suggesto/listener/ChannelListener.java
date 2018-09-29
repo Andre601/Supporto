@@ -5,6 +5,7 @@ import com.andre601.suggesto.utils.TicketUtil;
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.PermUtil;
 import net.dv8tion.jda.core.entities.*;
+import net.dv8tion.jda.core.events.channel.category.CategoryDeleteEvent;
 import net.dv8tion.jda.core.events.channel.text.TextChannelDeleteEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
@@ -12,6 +13,7 @@ import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.text.MessageFormat;
+import java.util.concurrent.TimeUnit;
 
 public class ChannelListener extends ListenerAdapter {
 
@@ -72,6 +74,24 @@ public class ChannelListener extends ListenerAdapter {
             );
             return;
         }
+
+        for(TextChannel textChannel : guild.getTextChannels()){
+            if(Database.hasTicket(textChannel.getId())){
+                if(msg.getMember().getUser().getId().equals(Database.getAuthorID(textChannel.getId()))){
+                    tc.sendMessage(MessageFormat.format(
+                            "{0} You already have a ticket created.\n" +
+                            "Please go to {1} and answer or close it!",
+                            msg.getAuthor().getAsMention(),
+                            textChannel.getAsMention()
+                    )).queue(message -> {
+                        msg.delete().queue();
+                        message.delete().queueAfter(10, TimeUnit.SECONDS);
+                    });
+                    return;
+                }
+            }
+        }
+
         String raw = msg.getContentRaw();
         Category category = getSupportCategory(guild);
 
@@ -93,6 +113,16 @@ public class ChannelListener extends ListenerAdapter {
         }
         if(Database.hasTicket(tc.getId()))
             TicketUtil.removeTicket(tc.getId());
+    }
+
+    public void onCategoryDelete(CategoryDeleteEvent event){
+        Category category = event.getCategory();
+        Category supportCategory = getSupportCategory(event.getGuild());
+
+        if(supportCategory == null) return;
+        if(category != supportCategory) return;
+
+        Database.setCategory(event.getGuild(), "none");
     }
 
     public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event){

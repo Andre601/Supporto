@@ -62,6 +62,7 @@ public class CmdHelp implements Command {
                 ))
                 .addField("Bot:", MessageFormat.format(
                         "`{0}Help`\n" +
+                        "`{0}Info`\n" +
                         "`{0}Invite`\n" +
                         "`{0}Stats`",
                         prefix

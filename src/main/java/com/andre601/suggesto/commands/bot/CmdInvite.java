@@ -34,9 +34,11 @@ public class CmdInvite implements Command {
                         "Here are some links, that can be important.\n" +
                         "\n" +
                         "[`Bot-Invite`]({0})\n" +
-                        "[`Support-Guild`]({1})",
-                        LinkUtil.getInviteURL(ReadyListener.getJda()),
-                        LinkUtil.guild_invite
+                        "[`Support-Guild`]({1})\n" +
+                        "[`GitHub`]({2})",
+                        LinkUtil.INVITE_BOT(ReadyListener.getJda()),
+                        LinkUtil.INVITE_GUILD,
+                        LinkUtil.GITHUB
                 ));
 
         tc.sendMessage(invite.build()).queue();

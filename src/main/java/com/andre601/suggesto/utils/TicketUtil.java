@@ -46,76 +46,135 @@ public class TicketUtil {
 
     public static void createTicket(Guild guild, TextChannel tc, Category category, Member author, String msg){
 
-        Long ticketID = Database.getNewTicketID(guild);
-        Role role = getStaffRole(guild);
-
         TextChannel support;
-        try {
-            if (category == null)
-                support = (TextChannel) guild.getController().createTextChannel(MessageFormat.format(
-                        "Ticket-{0}",
-                        ticketID
-                )).complete();
-            else
-                support = (TextChannel) category.createTextChannel(MessageFormat.format(
-                        "Ticket-{0}",
-                        ticketID
-                )).complete();
-        }catch (Exception ex){
-            tc.sendMessage(MessageFormat.format(
-                    "{0} I can't create a ticket.\n" +
-                    "Make sure, that I have the Manage channel permission in the guild and/or category!",
-                    author.getUser().getAsMention()
-            )).queue();
-            return;
+
+        if(category != null){
+            if(!PermUtil.canManagePerms(category) || !PermUtil.canManageChannels(category)){
+                tc.sendMessage(MessageFormat.format(
+                        "{0} I can't create a ticket.\n" +
+                        "Make sure, that I have the `manage channels` and `manage permission` permission in the " +
+                        "guild and category!",
+                        author.getUser().getAsMention()
+                )).queue();
+                return;
+            }
+
+            Long ticketID = Database.getNewTicketID(guild);
+            Role role = getStaffRole(guild);
+            support = (TextChannel) category.createTextChannel(MessageFormat.format(
+                    "Ticket-{0}",
+                    ticketID
+            )).complete();
+            support.createPermissionOverride(author).setAllow(
+                    Permission.VIEW_CHANNEL,
+                    Permission.MESSAGE_WRITE,
+                    Permission.MESSAGE_READ,
+                    Permission.MESSAGE_HISTORY,
+                    Permission.MESSAGE_EMBED_LINKS,
+                    Permission.MESSAGE_ATTACH_FILES,
+                    Permission.MESSAGE_ADD_REACTION,
+                    Permission.MESSAGE_EXT_EMOJI
+            ).queue();
+            support.createPermissionOverride(guild.getSelfMember()).setAllow(
+                    Permission.MESSAGE_MANAGE,
+                    Permission.MANAGE_CHANNEL,
+                    Permission.MANAGE_ROLES,
+                    Permission.MESSAGE_EMBED_LINKS,
+                    Permission.MESSAGE_READ,
+                    Permission.MESSAGE_WRITE,
+                    Permission.MESSAGE_HISTORY,
+                    Permission.MESSAGE_ADD_REACTION
+            ).queue();
+            support.putPermissionOverride(guild.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
+
+            EmbedBuilder ticket = EmbedUtil.getEmbed()
+                    .setTitle(MessageFormat.format(
+                            "Ticket #{0}",
+                            ticketID
+                    ))
+                    .addField("Creator:", author.getAsMention(), false)
+                    .addField("Message:", MessageFormat.format(
+                            "```\n" +
+                            "{0}\n" +
+                            "```",
+                            msg
+                    ), false)
+                    .addField("Close ticket:", MessageFormat.format(
+                            "Only the creator of the ticket{0}or users with `manage server` permission can " +
+                            "close this ticket.\n" +
+                            "To close a ticket, click on the ✅ reaction of this message!",
+                            (role == null ? " " : ", users with " + role.getAsMention() + " ")
+                    ),false);
+
+            support.sendMessage(author.getAsMention()).embed(ticket.build()).queue(message -> {
+                message.pin().queue();
+                message.addReaction("✅").queue();
+                Database.saveTicket(support.getId(), message.getId(), author.getUser().getId(), ticketID);
+            });
+        }else{
+            if(!(PermUtil.canManagePerms(guild) && PermUtil.canManageChannels(guild))){
+                tc.sendMessage(MessageFormat.format(
+                        "{0} I can't create a ticket.\n" +
+                        "Make sure, that I have the `manage channels` and `manage permission` permission in the " +
+                        "guild and category!",
+                        author.getUser().getAsMention()
+                )).queue();
+                return;
+            }
+
+            Long ticketID = Database.getNewTicketID(guild);
+            Role role = getStaffRole(guild);
+            support = (TextChannel) guild.getController().createTextChannel(MessageFormat.format(
+                    "Ticket-{0}",
+                    ticketID
+            )).complete();
+            support.createPermissionOverride(author).setAllow(
+                    Permission.VIEW_CHANNEL,
+                    Permission.MESSAGE_WRITE,
+                    Permission.MESSAGE_READ,
+                    Permission.MESSAGE_HISTORY,
+                    Permission.MESSAGE_EMBED_LINKS,
+                    Permission.MESSAGE_ATTACH_FILES,
+                    Permission.MESSAGE_ADD_REACTION,
+                    Permission.MESSAGE_EXT_EMOJI
+            ).queue();
+            support.createPermissionOverride(guild.getSelfMember()).setAllow(
+                    Permission.MESSAGE_MANAGE,
+                    Permission.MANAGE_CHANNEL,
+                    Permission.MANAGE_ROLES,
+                    Permission.MESSAGE_EMBED_LINKS,
+                    Permission.MESSAGE_READ,
+                    Permission.MESSAGE_WRITE,
+                    Permission.MESSAGE_HISTORY,
+                    Permission.MESSAGE_ADD_REACTION
+            ).queue();
+            support.putPermissionOverride(guild.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
+
+            EmbedBuilder ticket = EmbedUtil.getEmbed()
+                    .setTitle(MessageFormat.format(
+                            "Ticket #{0}",
+                            ticketID
+                    ))
+                    .addField("Creator:", author.getAsMention(), false)
+                    .addField("Message:", MessageFormat.format(
+                            "```\n" +
+                            "{0}\n" +
+                            "```",
+                            msg
+                    ), false)
+                    .addField("Close ticket:", MessageFormat.format(
+                            "Only the creator of the ticket{0}or users with `manage server` permission can " +
+                            "close this ticket.\n" +
+                            "To close a ticket, click on the ✅ reaction of this message!",
+                            (role == null ? " " : ", users with " + role.getAsMention() + " ")
+                    ),false);
+
+            support.sendMessage(author.getAsMention()).embed(ticket.build()).queue(message -> {
+                message.pin().queue();
+                message.addReaction("✅").queue();
+                Database.saveTicket(support.getId(), message.getId(), author.getUser().getId(), ticketID);
+            });
         }
-
-        support.createPermissionOverride(author).setAllow(
-                Permission.VIEW_CHANNEL,
-                Permission.MESSAGE_WRITE,
-                Permission.MESSAGE_READ,
-                Permission.MESSAGE_HISTORY,
-                Permission.MESSAGE_EMBED_LINKS,
-                Permission.MESSAGE_ATTACH_FILES,
-                Permission.MESSAGE_ADD_REACTION,
-                Permission.MESSAGE_EXT_EMOJI
-        ).queue();
-        support.createPermissionOverride(guild.getSelfMember()).setAllow(
-                Permission.MESSAGE_MANAGE,
-                Permission.MANAGE_CHANNEL,
-                Permission.MANAGE_ROLES,
-                Permission.MESSAGE_EMBED_LINKS,
-                Permission.MESSAGE_READ,
-                Permission.MESSAGE_WRITE,
-                Permission.MESSAGE_HISTORY,
-                Permission.MESSAGE_ADD_REACTION
-        ).queue();
-        support.putPermissionOverride(guild.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
-
-        EmbedBuilder ticket = EmbedUtil.getEmbed()
-                .setTitle(MessageFormat.format(
-                        "Ticket #{0}",
-                        ticketID
-                ))
-                .addField("Creator:", author.getAsMention(), false)
-                .addField("Message:", MessageFormat.format(
-                        "```\n" +
-                        "{0}\n" +
-                        "```",
-                        msg
-                ), false)
-                .addField("Close ticket:", MessageFormat.format(
-                        "Only the creator of the ticket{0}or users with `manage server` permission can " +
-                        "close this ticket.\n" +
-                        "To close a ticket, click on the ✅ reaction of this message!",
-                        (role == null ? " " : ", users with " + role.getAsMention() + " ")
-                ),false);
-
-        support.sendMessage(author.getAsMention()).embed(ticket.build()).queue(message -> {
-            message.pin().queue();
-            message.addReaction("✅").queue();
-            Database.saveTicket(support.getId(), message.getId(), author.getUser().getId(), ticketID);
-        });
     }
 
     public static void performClose(Guild guild, User closer, String channelID){

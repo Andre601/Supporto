@@ -1,5 +1,6 @@
 package com.andre601.suggesto.utils;
 
+import com.andre601.suggesto.SuggestoBot;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.utils.PermissionUtil;
@@ -11,8 +12,25 @@ public class PermUtil {
         return PermissionUtil.checkPermission(tc, tc.getGuild().getSelfMember(), Permission.MESSAGE_MANAGE);
     }
 
+    public static boolean canManagePerms(Category category){
+        return PermissionUtil.checkPermission(category, category.getGuild().getSelfMember(),
+                Permission.MANAGE_PERMISSIONS);
+    }
+
+    public static boolean canManagePerms(Guild guild){
+        return PermissionUtil.checkPermission(guild.getSelfMember(), Permission.MANAGE_PERMISSIONS);
+    }
+
     public static boolean canManageChannels(TextChannel tc){
         return PermissionUtil.checkPermission(tc, tc.getGuild().getSelfMember(), Permission.MANAGE_CHANNEL);
+    }
+
+    public static boolean canManageChannels(Category category){
+        return PermissionUtil.checkPermission(category, category.getGuild().getSelfMember(), Permission.MANAGE_CHANNEL);
+    }
+
+    public static boolean canManageChannels(Guild guild){
+        return PermissionUtil.checkPermission(guild.getSelfMember(), Permission.MANAGE_CHANNEL);
     }
 
     public static boolean isBot(Message msg){
@@ -57,5 +75,9 @@ public class PermUtil {
 
     public static boolean isStaff(Member member, Role role){
         return member.getRoles().contains(role);
+    }
+
+    public static boolean isBeta(){
+        return SuggestoBot.getFile().getItem("config", "beta").equalsIgnoreCase("true");
     }
 }

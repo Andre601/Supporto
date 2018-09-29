@@ -24,6 +24,12 @@ To know, what prefix is used in a guild, simply mention the bot.
 Shows you all available commands.  
 You can provide a command after `Help` (f.e. `t_help settings`) to get info about the command.
 
+#### Info
+**Aliases**:
+- Information
+
+Gives basic info for the bot.
+
 #### Invite
 **Aliases**:
 - link

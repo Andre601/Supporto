@@ -5,7 +5,6 @@ import com.rethinkdb.net.Connection;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 
-import java.lang.management.ManagementFactory;
 import java.util.Map;
 
 public class Database {
@@ -18,8 +17,8 @@ public class Database {
             .db("suggesto")
             .connect();
 
-    private static String guildTable = "guilds";
-    private static String ticketsTable = "tickets";
+    private static String guildTable = PermUtil.isBeta() ? "guilds_beta" : "guilds";
+    private static String ticketsTable = PermUtil.isBeta() ? "tickets_beta" : "tickets";
     private static String statsTable = "stats";
 
     public static void createDB(Guild g) {
@@ -150,14 +149,15 @@ public class Database {
 
     public static String getTotalTickets(){
         Map stats = getStats("totalTickets");
-        return stats.get("tickets").toString();
+        return stats.get(PermUtil.isBeta() ? "ticketsBeta" : "tickets").toString();
     }
 
     public static void updateTotalTickets(){
         Map stats = getStats("totalTickets");
-        long tickets = Long.valueOf(stats.get("tickets").toString());
+        long tickets = Long.valueOf(stats.get(PermUtil.isBeta() ? "ticketsBeta" : "tickets").toString());
         tickets++;
 
-        r.table(statsTable).get("totalTickets").update(r.hashMap("tickets", tickets)).run(conn);
+        r.table(statsTable).get("totalTickets").update(r.hashMap(PermUtil.isBeta() ? "ticketsBeta" : "tickets",
+                tickets)).run(conn);
     }
 }
