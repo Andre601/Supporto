@@ -5,6 +5,7 @@ import com.andre601.suggesto.commands.bot.CmdInfo;
 import com.andre601.suggesto.commands.bot.CmdInvite;
 import com.andre601.suggesto.commands.bot.CmdStats;
 import com.andre601.suggesto.commands.guild.CmdGuild;
+import com.andre601.suggesto.commands.guild.CmdRoles;
 import com.andre601.suggesto.commands.guild.CmdSettings;
 import com.andre601.suggesto.commands.owner.CmdLeave;
 import com.andre601.suggesto.commands.owner.CmdShutdown;
@@ -27,6 +28,7 @@ public class CommandRegister {
                 new CmdStats(),
                 // Guild
                 new CmdGuild(),
+                new CmdRoles(),
                 new CmdSettings(),
                 // Owner
                 new CmdLeave(),

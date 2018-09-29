@@ -53,6 +53,14 @@ This commands are for either getting some guild-info, or for changing stuff.
 
 Shows general info about the guild.
 
+#### Roles
+**Alias**:
+- Role
+- Listroles
+
+Shows you a list of roles and their IDs in the guild.
+Requires you to have `manage server` permission.
+
 #### Settings
 **Alias**:
 - Options
