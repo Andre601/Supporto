@@ -53,6 +53,18 @@ public class CmdRemove implements Command {
     public void execute(Message msg, String s) {
         Guild guild = msg.getGuild();
         TextChannel tc = msg.getTextChannel();
+        Role staff = getRole(guild, Database.getRoleID(guild));
+
+        if(!PermUtil.isAdmin(tc, msg.getMember())){
+            if(staff == null){
+                EmbedUtil.sendError(msg, "You aren't allowed to add a role!");
+                return;
+            }
+            if(!PermUtil.isStaff(msg.getMember(), staff)){
+                EmbedUtil.sendError(msg, "You aren't allowed to add a role!");
+                return;
+            }
+        }
 
         if(!Database.hasTicket(tc.getId())){
             EmbedUtil.sendError(msg, "Please run this command inside a ticket!");
@@ -106,18 +118,6 @@ public class CmdRemove implements Command {
                 break;
 
             case "role":
-                Role staff = getRole(guild, Database.getRoleID(guild));
-                if(!PermUtil.isAdmin(tc, msg.getMember())){
-                    if(staff == null){
-                        EmbedUtil.sendError(msg, "You aren't allowed to add a role!");
-                        return;
-                    }
-                    if(!PermUtil.isStaff(msg.getMember(), staff)){
-                        EmbedUtil.sendError(msg, "You aren't allowed to add a role!");
-                        return;
-                    }
-                }
-
                 Role role = getRole(guild, args[1]);
                 if(role == null){
                     EmbedUtil.sendError(msg, MessageFormat.format(
