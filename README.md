@@ -11,10 +11,11 @@ This was made to let people have a way, to make a message in their ticket-channe
 If you still want to create a ticket, add a `-test` to the message.
 
 ## Commands
+The default prefix for commands is `t_`.
+To know, what prefix is used in a guild, simply mention the bot.
 
 ### Bot
-The default prefix for commands is `t_`.  
-To know, what prefix is used in a guild, simply mention the bot.
+General commands to get info about the bot.
 
 #### Help
 **Aliases**:
@@ -76,3 +77,18 @@ This command requires you to have the `manage server` permission!
 | channel  | `channel <set #channel\|reset>`    | Sets or resets the channel for creating tickets.            |  
 | category | `category <set categoryID\|reset>` | Sets or resets the category, where tickets are created.     |  
 | role     | `role <set roleID\|reset>`         | Sets or resets a role that people could close tickets with. |  
+
+### Tickets
+This commands can only be run inside a ticket.
+
+#### Add
+Lets you add a member or role to the ticket.
+
+- `member <memberID>` adds a member, if the ID is valid.
+- `role <roleID>` adds a role, if the ID is valid.
+
+#### Remove
+Lets you remove a member or role from the ticket.
+
+- `member <memberID>` removes a member, if the ID is valid.
+- `role <roleID>` removes a role, if the ID is valid.
