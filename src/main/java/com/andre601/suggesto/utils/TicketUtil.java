@@ -196,7 +196,7 @@ public class TicketUtil {
         ticket.sendMessage(String.format(
                 "%s Are you sure, you want to close this ticket?\n" +
                 "Type `>confirm` to confirm this action.\n" +
-                "This action will be automatically cancelled in 30 seconds...",
+                "**This action will be cancelled in 30 seconds...**",
                 closer.getAsMention()
         )).queue(message -> {
             EventWaiter waiter = SuggestoBot.waiter;

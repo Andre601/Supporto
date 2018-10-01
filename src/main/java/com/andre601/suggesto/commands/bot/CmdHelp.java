@@ -71,6 +71,11 @@ public class CmdHelp implements Command {
                         "`{0}Guild`\n" +
                         "`{0}Settings`",
                         prefix
+                ), false)
+                .addField("Tickets:", MessageFormat.format(
+                        "`{0}Add`\n" +
+                        "`{0}Remove`",
+                        prefix
                 ), false);
 
         if(s.length() != 0){

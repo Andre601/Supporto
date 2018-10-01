@@ -7,8 +7,11 @@ import com.andre601.suggesto.commands.bot.CmdStats;
 import com.andre601.suggesto.commands.guild.CmdGuild;
 import com.andre601.suggesto.commands.guild.CmdRoles;
 import com.andre601.suggesto.commands.guild.CmdSettings;
+import com.andre601.suggesto.commands.owner.CmdBlacklist;
 import com.andre601.suggesto.commands.owner.CmdLeave;
 import com.andre601.suggesto.commands.owner.CmdShutdown;
+import com.andre601.suggesto.commands.tickets.CmdAdd;
+import com.andre601.suggesto.commands.tickets.CmdRemove;
 import com.github.rainestormee.jdacommand.Command;
 
 import java.util.Arrays;
@@ -31,8 +34,12 @@ public class CommandRegister {
                 new CmdRoles(),
                 new CmdSettings(),
                 // Owner
+                new CmdBlacklist(),
                 new CmdLeave(),
-                new CmdShutdown()
+                new CmdShutdown(),
+                // Tickets
+                new CmdAdd(),
+                new CmdRemove()
         );
     }
 

@@ -31,7 +31,7 @@ public class CmdLeave implements Command {
                                 "I left your guild `{0}`. Reason:\n" +
                                 "`{1}`",
                                 ReadyListener.getShards().getGuildById(args[0]).getName(),
-                                pm
+                                (pm == null || pm.equals("") ? "No reason" : pm)
                         )).queue(),
                         throwable -> tc.sendMessage("Couldn't send PM.").queue()
                 );

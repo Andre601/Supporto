@@ -6,7 +6,7 @@
 
     <groupId>com.andre601</groupId>
     <artifactId>Suggesto</artifactId>
-    <version>1.9.5</version>
+    <version>1.9.9</version>
     <build>
         <resources>
             <resource>
