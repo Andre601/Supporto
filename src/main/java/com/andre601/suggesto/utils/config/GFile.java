@@ -1,6 +1,6 @@
 package com.andre601.suggesto.utils.config;
 
-import com.andre601.suggesto.SuggestoBot;
+import com.andre601.suggesto.Supporto;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.stream.JsonReader;
@@ -19,7 +19,7 @@ import java.util.Map;
  * |------------------------------------------------------------------|
  */
 
-import static com.andre601.suggesto.SuggestoBot.getLogger;
+import static com.andre601.suggesto.Supporto.getLogger;
 
 public class GFile {
 
@@ -43,7 +43,7 @@ public class GFile {
                     }
                 }
                 if(file.createNewFile()){
-                    if(cutil.exportResource(SuggestoBot.class.getResourceAsStream(internalPath), externalPath)){
+                    if(cutil.exportResource(Supporto.class.getResourceAsStream(internalPath), externalPath)){
                         getLogger().info(name + " successfully created!");
                     }else{
                         getLogger().error("Failed to create " + name);

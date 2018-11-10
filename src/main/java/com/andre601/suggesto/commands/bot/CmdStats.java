@@ -37,7 +37,7 @@ public class CmdStats implements Command {
         String seconds = s + (s == 1 ? " second" : " seconds");
 
         return MessageFormat.format(
-                "{0} {1} {2} {3}",
+                "`{0}, {1}, {2} and {3}`",
                 days,
                 hours,
                 minutes,

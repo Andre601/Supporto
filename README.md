@@ -69,14 +69,11 @@ Requires you to have `manage server` permission.
 Lets you change different settings of the bot.  
 This command requires you to have the `manage server` permission!
 
-**Available options**:  
-
-| option   | syntax                             | Description                                                 |  
-| -------- | ---------------------------------- | ----------------------------------------------------------- |  
-| prefix   | `prefix <set prefix\|reset>`       | Sets or resets the prefix for the guild.                    |  
-| channel  | `channel <set #channel\|reset>`    | Sets or resets the channel for creating tickets.            |  
-| category | `category <set categoryID\|reset>` | Sets or resets the category, where tickets are created.     |  
-| role     | `role <set roleID\|reset>`         | Sets or resets a role that people could close tickets with. |  
+**Subcommands**:
+- `prefix <set <prefix>|reset>` Set or reset the prefix.
+- `channel <set <#channel>|reset>` Set or reset a channel as ticket-channel.
+- `category <set <categoryID>|reset>` Set or reset a category for creating tickets in it.
+- `role <set <roleID>|reset>` Set or reset a role, that should be able to close tickets.
 
 ### Tickets
 This commands can only be run inside a ticket.
@@ -84,11 +81,13 @@ This commands can only be run inside a ticket.
 #### Add
 Lets you add a member or role to the ticket.
 
+**Subcommands**:
 - `member <memberID>` adds a member, if the ID is valid.
 - `role <roleID>` adds a role, if the ID is valid.
 
 #### Remove
 Lets you remove a member or role from the ticket.
 
+**Subcommands**:
 - `member <memberID>` removes a member, if the ID is valid.
 - `role <roleID>` removes a role, if the ID is valid.

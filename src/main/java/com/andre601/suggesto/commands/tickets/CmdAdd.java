@@ -107,7 +107,10 @@ public class CmdAdd implements Command {
                         Permission.MESSAGE_ATTACH_FILES,
                         Permission.MESSAGE_ADD_REACTION,
                         Permission.MESSAGE_EXT_EMOJI
-                ).queue();
+                ).reason(MessageFormat.format(
+                        "Added member {0}",
+                        member.getEffectiveName()
+                )).queue();
 
                 EmbedBuilder memberSuccess = EmbedUtil.getEmbed(msg.getAuthor())
                         .setColor(Color.GREEN)
@@ -144,7 +147,7 @@ public class CmdAdd implements Command {
                                 Permission.MESSAGE_ATTACH_FILES,
                                 Permission.MESSAGE_ADD_REACTION,
                                 Permission.MESSAGE_EXT_EMOJI
-                        ).queue();
+                        ).reason("Added @everyone").queue();
                     } else {
                         tc.createPermissionOverride(role).setAllow(
                                 Permission.VIEW_CHANNEL,
@@ -155,7 +158,10 @@ public class CmdAdd implements Command {
                                 Permission.MESSAGE_ATTACH_FILES,
                                 Permission.MESSAGE_ADD_REACTION,
                                 Permission.MESSAGE_EXT_EMOJI
-                        ).queue();
+                        ).reason(MessageFormat.format(
+                                "Added role {0}",
+                                role.getName()
+                        )).queue();
                     }
                 }catch(Exception ex){
                     EmbedUtil.sendError(msg, "Couldn't add/override the role! Is it higher than my own?");

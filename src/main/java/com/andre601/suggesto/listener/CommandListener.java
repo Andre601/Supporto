@@ -1,6 +1,6 @@
 package com.andre601.suggesto.listener;
 
-import com.andre601.suggesto.SuggestoBot;
+import com.andre601.suggesto.Supporto;
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
 import com.andre601.suggesto.utils.PermUtil;
@@ -98,6 +98,10 @@ public class CommandListener extends ListenerAdapter {
                     if(!PermUtil.canSeeChannel(tc)) return;
                     if(!PermUtil.canSeeHistory(tc)) return;
                     if(!PermUtil.canSendMsg(tc)) return;
+                    if(!PermUtil.canAddReaction(tc)){
+                        EmbedUtil.sendError(msg, "I need permissions, to add reactions!");
+                        return;
+                    }
                     if(command.hasAttribute("manageServer") && !PermUtil.isAdmin(msg)){
                         EmbedUtil.sendError(msg,"You need the permission `manage server` for this command!");
                         return;
@@ -111,7 +115,7 @@ public class CommandListener extends ListenerAdapter {
                         HANDLER.execute(command, msg, split.length > 1 ? split[1] : "");
                         msg.delete().queue();
                     }catch (Exception ex){
-                        SuggestoBot.getLogger().error("Error in command", ex);
+                        Supporto.getLogger().error("Error in command", ex);
                     }
                 }
         );

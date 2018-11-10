@@ -6,7 +6,7 @@
 
     <groupId>com.andre601</groupId>
     <artifactId>Suggesto</artifactId>
-    <version>1.9.9</version>
+    <version>2.0.7</version>
     <build>
         <resources>
             <resource>
@@ -21,7 +21,7 @@
                     <finalName>Suggesto</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>com.andre601.suggesto.SuggestoBot</mainClass>
+                            <mainClass>com.andre601.suggesto.Supporto</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -45,7 +45,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.andre601.suggesto.SuggestoBot</mainClass>
+                            <mainClass>com.andre601.suggesto.Supporto</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -136,6 +136,12 @@
             <groupId>com.github.rainestormee</groupId>
             <artifactId>JDA-Command</artifactId>
             <version>1.1.2</version>
+        </dependency>
+        <!-- DBL-API -->
+        <dependency>
+            <groupId>org.discordbots</groupId>
+            <artifactId>DBL-Java-Library</artifactId>
+            <version>2.0.1</version>
         </dependency>
     </dependencies>
 

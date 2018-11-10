@@ -1,6 +1,6 @@
 package com.andre601.suggesto.listener;
 
-import com.andre601.suggesto.SuggestoBot;
+import com.andre601.suggesto.Supporto;
 import com.andre601.suggesto.utils.Database;
 import net.dv8tion.jda.bot.sharding.ShardManager;
 import net.dv8tion.jda.core.JDA;
@@ -64,7 +64,7 @@ public class ReadyListener extends ListenerAdapter {
                     Database.getTotalTickets(),
                     jda.asBot().getShardManager().getGuildCache().size()
             )));
-            SuggestoBot.getLogger().info(MessageFormat.format(
+            Supporto.getLogger().info(MessageFormat.format(
                     "Enabled Bot {0} ({1}) on {2} guild(s) with {3} shard(s)!",
                     jda.getSelfUser().getName(),
                     jda.getSelfUser().getId(),

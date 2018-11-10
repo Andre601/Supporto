@@ -20,7 +20,6 @@ public class Database {
     private static String guildTable     = PermUtil.isBeta() ? "guilds_beta" : "guilds";
     private static String ticketsTable   = PermUtil.isBeta() ? "tickets_beta" : "tickets";
     private static String statsTable     = "stats";
-    private static String blacklistTable = "blacklist";
 
     public static void createDB(Guild g) {
         r.table(guildTable).insert(
@@ -160,27 +159,5 @@ public class Database {
 
         r.table(statsTable).get("totalTickets").update(r.hashMap(PermUtil.isBeta() ? "ticketsBeta" : "tickets",
                 tickets)).run(conn);
-    }
-
-    public static void addBlacklistedGuild(String guildID, String reason){
-        r.table(blacklistTable).insert(
-                r.array(
-                        r.hashMap("id", guildID)
-                        .with("reason", (reason == null ? "No reason given" : reason))
-                )
-        ).optArg("conflict", "update").run(conn);
-    }
-
-    public static void removeBlacklistedGuild(String guildID){
-        r.table(blacklistTable).get(guildID).delete().run(conn);
-    }
-
-    public static boolean isBlacklisted(String guildID){
-        return r.table(guildTable).get(guildID) != null;
-    }
-
-    public static String getReason(Guild guild){
-        Map g = r.table(blacklistTable).get(guild.getId()).run(conn);
-        return g.get("reason").toString();
     }
 }

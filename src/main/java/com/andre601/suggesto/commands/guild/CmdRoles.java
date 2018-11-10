@@ -1,6 +1,6 @@
 package com.andre601.suggesto.commands.guild;
 
-import com.andre601.suggesto.SuggestoBot;
+import com.andre601.suggesto.Supporto;
 import com.github.rainestormee.jdacommand.Command;
 import com.github.rainestormee.jdacommand.CommandAttribute;
 import com.github.rainestormee.jdacommand.CommandDescription;
@@ -42,7 +42,7 @@ public class CmdRoles implements Command {
     public void execute(Message msg, String s) {
         Guild guild = msg.getGuild();
         TextChannel tc = msg.getTextChannel();
-        builder = new Paginator.Builder().setEventWaiter(SuggestoBot.waiter).setTimeout(1, TimeUnit.MINUTES);
+        builder = new Paginator.Builder().setEventWaiter(Supporto.waiter).setTimeout(1, TimeUnit.MINUTES);
 
         StringBuilder sb = new StringBuilder();
         for(Role role : guild.getRoles()){

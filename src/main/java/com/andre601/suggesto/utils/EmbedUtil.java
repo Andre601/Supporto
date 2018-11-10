@@ -1,6 +1,6 @@
 package com.andre601.suggesto.utils;
 
-import com.andre601.suggesto.SuggestoBot;
+import com.andre601.suggesto.Supporto;
 import com.andre601.suggesto.listener.ReadyListener;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
@@ -63,7 +63,7 @@ public class EmbedUtil {
                 .setTimestamp(ZonedDateTime.now())
                 .build();
 
-        WebhookClient webhookClient = SuggestoBot.getWebhookClient(url);
+        WebhookClient webhookClient = Supporto.getWebhookClient(url);
         webhookClient.send(new WebhookMessageBuilder().addEmbeds(webhook)
                 .setUsername(webhookName)
                 .setAvatarUrl(guild.getJDA().getSelfUser().getEffectiveAvatarUrl())

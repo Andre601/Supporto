@@ -106,7 +106,10 @@ public class CmdRemove implements Command {
                     return;
                 }
 
-                tc.getPermissionOverride(member).delete().queue();
+                tc.getPermissionOverride(member).delete().reason(MessageFormat.format(
+                    "Removed member {0}",
+                    member.getEffectiveName()
+            )).queue();
 
                 EmbedBuilder memberSuccess = EmbedUtil.getEmbed(msg.getAuthor())
                         .setColor(Color.GREEN)
@@ -135,9 +138,14 @@ public class CmdRemove implements Command {
 
                 try {
                     if (role.isPublicRole()) {
-                        tc.putPermissionOverride(role).setDeny(Permission.VIEW_CHANNEL).queue();
+                        tc.putPermissionOverride(role).setDeny(Permission.VIEW_CHANNEL).reason(
+                                "Removed @everyone"
+                        ).queue();
                     } else {
-                        tc.getPermissionOverride(role).delete().queue();
+                        tc.getPermissionOverride(role).delete().reason(MessageFormat.format(
+                                "Removed role {0}",
+                                role.getName()
+                        )).queue();
                     }
                 }catch(Exception ex){
                     EmbedUtil.sendError(msg, "Couldn't remove/override the role! Is it higher than my own?");

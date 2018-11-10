@@ -1,13 +1,16 @@
 package com.andre601.suggesto.utils;
 
-import com.andre601.suggesto.SuggestoBot;
+import com.andre601.suggesto.Supporto;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.requests.RestAction;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -50,8 +53,8 @@ public class TicketUtil {
 
         if(category != null){
             if(!PermUtil.canManagePerms(category) || !PermUtil.canManageChannels(category)){
-                tc.sendMessage(MessageFormat.format(
-                        "{0} I can't create a ticket.\n" +
+                tc.sendMessage(String.format(
+                        "%s I can't create a ticket.\n" +
                         "Make sure, that I have the `manage channels` and `manage permission` permission in the " +
                         "guild and category!",
                         author.getUser().getAsMention()
@@ -61,8 +64,11 @@ public class TicketUtil {
 
             Long ticketID = Database.getNewTicketID(guild);
             Role role = getStaffRole(guild);
-            support = (TextChannel) category.createTextChannel(MessageFormat.format(
-                    "Ticket-{0}",
+            support = (TextChannel) category.createTextChannel(String.format(
+                    "Ticket-%s",
+                    ticketID
+            )).reason(String.format(
+                    "Create ticket #%s",
                     ticketID
             )).complete();
             support.createPermissionOverride(author).setAllow(
@@ -88,19 +94,19 @@ public class TicketUtil {
             support.putPermissionOverride(guild.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
 
             EmbedBuilder ticket = EmbedUtil.getEmbed()
-                    .setTitle(MessageFormat.format(
-                            "Ticket #{0}",
+                    .setTitle(String.format(
+                            "Ticket #%s",
                             ticketID
                     ))
                     .addField("Creator:", author.getAsMention(), false)
-                    .addField("Message:", MessageFormat.format(
+                    .addField("Message:", String.format(
                             "```\n" +
-                            "{0}\n" +
+                            "%s\n" +
                             "```",
                             msg
                     ), false)
-                    .addField("Close ticket:", MessageFormat.format(
-                            "Only the creator of the ticket{0}or users with `manage server` permission can " +
+                    .addField("Close ticket:", String.format(
+                            "Only the creator of the ticket%sor users with `manage server` permission can " +
                             "close this ticket.\n" +
                             "To close a ticket, click on the ✅ reaction of this message!",
                             (role == null ? " " : ", users with " + role.getAsMention() + " ")
@@ -113,8 +119,8 @@ public class TicketUtil {
             });
         }else{
             if(!(PermUtil.canManagePerms(guild) && PermUtil.canManageChannels(guild))){
-                tc.sendMessage(MessageFormat.format(
-                        "{0} I can't create a ticket.\n" +
+                tc.sendMessage(String.format(
+                        "%s I can't create a ticket.\n" +
                         "Make sure, that I have the `manage channels` and `manage permission` permission in the " +
                         "guild and category!",
                         author.getUser().getAsMention()
@@ -124,8 +130,11 @@ public class TicketUtil {
 
             Long ticketID = Database.getNewTicketID(guild);
             Role role = getStaffRole(guild);
-            support = (TextChannel) guild.getController().createTextChannel(MessageFormat.format(
-                    "Ticket-{0}",
+            support = (TextChannel) guild.getController().createTextChannel(String.format(
+                    "Ticket-%s",
+                    ticketID
+            )).reason(String.format(
+                    "Create ticket #%s",
                     ticketID
             )).complete();
             support.createPermissionOverride(author).setAllow(
@@ -151,19 +160,19 @@ public class TicketUtil {
             support.putPermissionOverride(guild.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
 
             EmbedBuilder ticket = EmbedUtil.getEmbed()
-                    .setTitle(MessageFormat.format(
-                            "Ticket #{0}",
+                    .setTitle(String.format(
+                            "Ticket #%s",
                             ticketID
                     ))
                     .addField("Creator:", author.getAsMention(), false)
-                    .addField("Message:", MessageFormat.format(
+                    .addField("Message:", String.format(
                             "```\n" +
-                            "{0}\n" +
+                            "%s\n" +
                             "```",
                             msg
                     ), false)
-                    .addField("Close ticket:", MessageFormat.format(
-                            "Only the creator of the ticket{0}or users with `manage server` permission can " +
+                    .addField("Close ticket:", String.format(
+                            "Only the creator of the ticket%sor users with `manage server` permission can " +
                             "close this ticket.\n" +
                             "To close a ticket, click on the ✅ reaction of this message!",
                             (role == null ? " " : ", users with " + role.getAsMention() + " ")
@@ -199,7 +208,7 @@ public class TicketUtil {
                 "**This action will be cancelled in 30 seconds...**",
                 closer.getAsMention()
         )).queue(message -> {
-            EventWaiter waiter = SuggestoBot.waiter;
+            EventWaiter waiter = Supporto.waiter;
             waiter.waitForEvent(
                     MessageReceivedEvent.class,
                     ev -> (isMessage(ev.getMessage()) &&
@@ -209,7 +218,7 @@ public class TicketUtil {
                             ev.getAuthor() == closer
                     ),
                     ev -> {
-                        closeTicket(guild, ticket);
+                        closeTicket(guild, ticket, closer);
                         queued.remove(closer);
                     },
                     30, TimeUnit.SECONDS,
@@ -217,7 +226,7 @@ public class TicketUtil {
                         try{
                             message.delete().queue();
                         }catch (Exception ex){
-                            SuggestoBot.getLogger().error("Couldn't delete a own message :-/");
+                            Supporto.getLogger().error("Couldn't delete a own message :-/");
                         }
 
                         queued.remove(closer);
@@ -227,24 +236,34 @@ public class TicketUtil {
         });
     }
 
-    public static void closeTicket(Guild guild, TextChannel ticket){
+    public static void closeTicket(Guild guild, TextChannel ticket, User closer){
 
         MessageHistory history = ticket.getHistory();
         while(history.retrievePast(100).complete().size() > 0);
 
         List<String> transcripts = new LinkedList<>();
+        List<String> transcriptFile = new LinkedList<>();
         for(Message message : history.getRetrievedHistory()){
             String timestamp = MessageUtil.formatTime(LocalDateTime.from(message.getCreationTime()));
             transcripts.add(String.format(
                     "`[%s]` **%s**: %s",
                     timestamp,
                     message.getAuthor().getName(),
-                    message.getContentRaw()
+                    message.getContentDisplay()
+            ));
+            transcriptFile.add(String.format(
+                    "[%s] %s: %s",
+                    timestamp,
+                    message.getAuthor().getName(),
+                    message.getContentDisplay()
             ));
         }
         Collections.reverse(transcripts);
+        Collections.reverse(transcriptFile);
+
         List<String> transcriptsMsg = new LinkedList<>();
         List<String> messageList = new LinkedList<>();
+
         for(String message : transcripts){
             if(messageList.stream().mapToInt(String::length).sum() + messageList.size() + message.length() + 1 > 1992){
                 transcriptsMsg.add(String.join("\n", messageList));
@@ -252,11 +271,26 @@ public class TicketUtil {
             }
             messageList.add(message);
         }
-        if(messageList.size() > 0) transcriptsMsg.add(String.join("\n", messageList));
+        if(messageList.size() > 0){
+            transcriptsMsg.add(String.join("\n", messageList));
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for(String message : transcriptFile){
+            builder.append(message).append("\n");
+        }
 
         List<User> users = history.getRetrievedHistory().stream().map(Message::getAuthor).filter(user -> !user.isBot())
                 .distinct().collect(Collectors.toList());
 
+        InputStream is;
+        try {
+            is = new ByteArrayInputStream(builder.toString().getBytes("UTF-8"));
+        }catch (Exception ex){
+            is = null;
+        }
+
+        final InputStream input = is;
         users.stream().filter(user -> !user.isFake()).map(User::openPrivateChannel).map(RestAction::complete)
                 .forEach(pm -> {
                     pm.sendMessage(String.format(
@@ -268,9 +302,18 @@ public class TicketUtil {
                     for(String transcriptMsg : transcriptsMsg){
                         pm.sendMessage(transcriptMsg).queue();
                     }
+                    if(input != null){
+                        pm.sendFile(input, String.format(
+                                "%s.txt",
+                                ticket.getName()
+                        )).queue();
+                    }
                 });
 
-        ticket.delete().queue();
+        ticket.delete().reason(MessageFormat.format(
+                "Ticket closed by {0}",
+                closer.getName()
+        )).queue();
         Database.deleteTicket(ticket.getId());
     }
 

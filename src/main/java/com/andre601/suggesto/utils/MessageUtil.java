@@ -1,5 +1,6 @@
 package com.andre601.suggesto.utils;
 
+import com.andre601.suggesto.Supporto;
 import com.andre601.suggesto.listener.ReadyListener;
 import net.dv8tion.jda.bot.sharding.ShardManager;
 import net.dv8tion.jda.core.entities.Game;
@@ -42,6 +43,7 @@ public class MessageUtil {
                         Database.getTotalTickets(),
                         shardManager.getGuildCache().size()
                 )));
+                if(!PermUtil.isBeta()) Supporto.getApi().setStats((int)shardManager.getGuildCache().size());
             }
         };
     }

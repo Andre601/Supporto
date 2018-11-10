@@ -1,6 +1,6 @@
 package com.andre601.suggesto.utils;
 
-import com.andre601.suggesto.SuggestoBot;
+import com.andre601.suggesto.Supporto;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.utils.PermissionUtil;
@@ -73,11 +73,15 @@ public class PermUtil {
         return PermissionUtil.checkPermission(tc, member, Permission.MANAGE_SERVER);
     }
 
+    public static boolean canAddReaction(TextChannel tc){
+        return PermissionUtil.checkPermission(tc, tc.getGuild().getSelfMember(), Permission.MESSAGE_ADD_REACTION);
+    }
+
     public static boolean isStaff(Member member, Role role){
         return member.getRoles().contains(role);
     }
 
     public static boolean isBeta(){
-        return SuggestoBot.getFile().getItem("config", "beta").equalsIgnoreCase("true");
+        return Supporto.getFile().getItem("config", "beta").equalsIgnoreCase("true");
     }
 }

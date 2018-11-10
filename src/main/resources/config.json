@@ -1,7 +1,9 @@
 {
   "token": "TOKEN",
+  "id": "id",
   "beta": "false",
   "webhookURL": "webhookURL",
+  "api-token": "API-TOKEN",
 
   "db-ip": "127.0.0.1",
   "db-name": "DBName"
