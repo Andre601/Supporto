@@ -277,7 +277,7 @@ public class TicketUtil {
 
         StringBuilder builder = new StringBuilder();
         for(String message : transcriptFile){
-            builder.append(message).append("\n");
+            builder.append(message).append("\r\n");
         }
 
         List<User> users = history.getRetrievedHistory().stream().map(Message::getAuthor).filter(user -> !user.isBot())
