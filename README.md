@@ -83,7 +83,7 @@ Lets you remove a member or role from the ticket.
 **Alias**:
 - Options
 
-Lets you change different settings of the bot.
+Lets you change different settings of the bot.  
 This command requires you to have the `manage server` permission!
 
 **Subcommands**:
