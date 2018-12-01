@@ -19,7 +19,9 @@ import java.text.MessageFormat;
         name = "Info",
         description = "Gives you basic info about the bot",
         triggers = {"info", "information"},
-        attributes = {@CommandAttribute(key = "bot")}
+        attributes = {
+                @CommandAttribute(key = "bot")
+        }
 )
 public class CmdInfo implements Command {
 

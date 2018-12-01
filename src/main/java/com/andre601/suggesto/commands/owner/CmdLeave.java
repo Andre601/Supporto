@@ -13,7 +13,9 @@ import java.text.MessageFormat;
         name = "Leave",
         description = "Lets the bot leave a discord",
         triggers = {"leave"},
-        attributes = {@CommandAttribute(key = "owner")}
+        attributes = {
+                @CommandAttribute(key = "owner")
+        }
 )
 public class CmdLeave implements Command {
 

@@ -16,7 +16,9 @@ import java.text.MessageFormat;
         name = "Invite",
         description = "Gives you links.",
         triggers = {"invite", "links", "link"},
-        attributes = {@CommandAttribute(key = "bot")}
+        attributes = {
+                @CommandAttribute(key = "bot")
+        }
 )
 public class CmdInvite implements Command {
 

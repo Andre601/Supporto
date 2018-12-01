@@ -22,7 +22,10 @@ import java.text.MessageFormat;
                 "`member <memberID>` Adds a member to the ticket.\n" +
                 "`role <roleID>` Adds a role to the ticket",
         triggers = {"add"},
-        attributes = {@CommandAttribute(key = "tickets")}
+        attributes = {
+                @CommandAttribute(key = "staff+"),
+                @CommandAttribute(key = "tickets")
+        }
 )
 public class CmdAdd implements Command {
 
@@ -52,18 +55,6 @@ public class CmdAdd implements Command {
     public void execute(Message msg, String s) {
         Guild guild = msg.getGuild();
         TextChannel tc = msg.getTextChannel();
-        Role staff = getRole(guild, Database.getRoleID(guild));
-
-        if(!PermUtil.isAdmin(tc, msg.getMember())){
-            if(staff == null){
-                EmbedUtil.sendError(msg, "You aren't allowed to add a role!");
-                return;
-            }
-            if(!PermUtil.isStaff(msg.getMember(), staff)){
-                EmbedUtil.sendError(msg, "You aren't allowed to add a role!");
-                return;
-            }
-        }
 
         if(!Database.hasTicket(tc.getId())){
             EmbedUtil.sendError(msg, "Please run this command inside a ticket!");

@@ -14,7 +14,10 @@ import java.util.concurrent.TimeUnit;
         name = "Roles",
         description = "Shows all available roles",
         triggers = {"role", "roles", "listroles"},
-        attributes = {@CommandAttribute(key = "manageServer"), @CommandAttribute(key = "guild")}
+        attributes = {
+                @CommandAttribute(key = "staff+"),
+                @CommandAttribute(key = "guild")
+        }
 )
 public class CmdRoles implements Command {
 

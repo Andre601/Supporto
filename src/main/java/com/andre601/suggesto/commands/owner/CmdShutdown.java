@@ -12,7 +12,9 @@ import net.dv8tion.jda.core.entities.TextChannel;
         name = "Shutdown",
         description = "Disables the bot",
         triggers = {"shutdown", "sleep", "disable"},
-        attributes = {@CommandAttribute(key = "owner")}
+        attributes = {
+                @CommandAttribute(key = "owner")
+        }
 )
 public class CmdShutdown implements Command {
 

@@ -103,7 +103,7 @@ public class TicketUtil {
                             "```\n" +
                             "%s\n" +
                             "```",
-                            msg
+                            msg.isEmpty() ? "(No message provided)" : msg
                     ), false)
                     .addField("Close ticket:", String.format(
                             "Only the creator of the ticket%sor users with `manage server` permission can " +
@@ -113,7 +113,11 @@ public class TicketUtil {
                     ),false);
 
             support.sendMessage(author.getAsMention()).embed(ticket.build()).queue(message -> {
-                message.pin().queue();
+                message.pin().queue(p -> message.getChannel().getHistory().retrievePast(100).queue(
+                        messages -> messages.stream().filter(
+                                pin -> pin.getAttachments().size() == 0 && pin.getEmbeds().size() == 0
+                        ).findFirst().ifPresent(m -> message.getChannel().deleteMessageById(m.getId()).queue())
+                ));
                 message.addReaction("✅").queue();
                 Database.saveTicket(support.getId(), message.getId(), author.getUser().getId(), ticketID);
             });
@@ -179,7 +183,11 @@ public class TicketUtil {
                     ),false);
 
             support.sendMessage(author.getAsMention()).embed(ticket.build()).queue(message -> {
-                message.pin().queue();
+                message.pin().queue(p -> message.getChannel().getHistory().retrievePast(100).queue(
+                        messages -> messages.stream().filter(
+                                pin -> pin.getAttachments().size() == 0 && pin.getEmbeds().size() == 0
+                        ).findFirst().ifPresent(m -> message.getChannel().deleteMessageById(m.getId()).queue())
+                ));
                 message.addReaction("✅").queue();
                 Database.saveTicket(support.getId(), message.getId(), author.getUser().getId(), ticketID);
             });
@@ -193,7 +201,7 @@ public class TicketUtil {
 
         if(queued.containsKey(closer) && queued.get(closer).equals(ticket.getId())){
             ticket.sendMessage(String.format(
-                    "%s You already requested a closing of this ticket!\n" +
+                    "%s You already requested a closing of this ticket!\n\n" +
                     "Please confirm your request!",
                     closer.getAsMention()
             )).queue();
@@ -203,8 +211,8 @@ public class TicketUtil {
         queued.put(closer, ticket.getId());
 
         ticket.sendMessage(String.format(
-                "%s Are you sure, you want to close this ticket?\n" +
-                "Type `>confirm` to confirm this action.\n" +
+                "%s Are you sure, you want to close this ticket?\r\n" +
+                "Type `>confirm` to confirm this action.\r\n" +
                 "**This action will be cancelled in 30 seconds...**",
                 closer.getAsMention()
         )).queue(message -> {
@@ -255,7 +263,7 @@ public class TicketUtil {
                     "[%s] %s: %s",
                     timestamp,
                     message.getAuthor().getName(),
-                    message.getContentDisplay()
+                    message.getContentDisplay().replace("\n", "\r\n")
             ));
         }
         Collections.reverse(transcripts);

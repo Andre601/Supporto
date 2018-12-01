@@ -64,9 +64,9 @@ public class ChannelListener extends ListenerAdapter {
         if(PermUtil.isSelf(msg)) return;
         if(role != null)
             if(PermUtil.isStaff(member, role))
-                if(!msg.getContentRaw().contains("-test")) return;
+                if(!msg.getContentRaw().contains("!create")) return;
         if(PermUtil.isAdmin(tc, member))
-            if (!msg.getContentRaw().contains("-test")) return;
+            if (!msg.getContentRaw().contains("!create")) return;
         if(!PermUtil.canManageChannels(tc)) {
             EmbedUtil.sendError(msg,
                     "I can't create a ticket due to a lack of permissions!\n" +
@@ -76,11 +76,16 @@ public class ChannelListener extends ListenerAdapter {
         }
 
         for(TextChannel textChannel : guild.getTextChannels()){
+            if(role != null)
+                if(PermUtil.isStaff(member, role)) break;
+
+            if(PermUtil.isAdmin(textChannel, member)) break;
+
             if(Database.hasTicket(textChannel.getId())){
                 if(msg.getMember().getUser().getId().equals(Database.getAuthorID(textChannel.getId()))){
-                    tc.sendMessage(MessageFormat.format(
-                            "{0} You already have a ticket created.\n" +
-                            "Please go to {1} and answer or close it!",
+                    tc.sendMessage(String.format(
+                            "%s You already have a ticket created.\n" +
+                            "Please go to %s and answer or close it!",
                             msg.getAuthor().getAsMention(),
                             textChannel.getAsMention()
                     )).queue(message -> {
@@ -95,7 +100,7 @@ public class ChannelListener extends ListenerAdapter {
         String raw = msg.getContentRaw();
         Category category = getSupportCategory(guild);
 
-        TicketUtil.createTicket(guild, tc, category, msg.getMember(), raw);
+        TicketUtil.createTicket(guild, tc, category, msg.getMember(), raw.replace("!create", ""));
         if (PermUtil.canManageMsg(tc))
             msg.delete().queue();
 

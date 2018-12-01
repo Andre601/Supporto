@@ -6,7 +6,7 @@ import com.andre601.suggesto.commands.bot.CmdInvite;
 import com.andre601.suggesto.commands.bot.CmdStats;
 import com.andre601.suggesto.commands.guild.CmdGuild;
 import com.andre601.suggesto.commands.guild.CmdRoles;
-import com.andre601.suggesto.commands.guild.CmdSettings;
+import com.andre601.suggesto.commands.tickets.CmdSettings;
 import com.andre601.suggesto.commands.owner.CmdLeave;
 import com.andre601.suggesto.commands.owner.CmdShutdown;
 import com.andre601.suggesto.commands.tickets.CmdAdd;

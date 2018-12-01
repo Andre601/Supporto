@@ -20,7 +20,9 @@ import static com.andre601.suggesto.listener.ReadyListener.getShards;
         name = "Stats",
         description = "Gives some stats.",
         triggers = {"stats", "stat", "statistics"},
-        attributes = {@CommandAttribute(key = "bot")}
+        attributes = {
+                @CommandAttribute(key = "bot")
+        }
 )
 public class CmdStats implements Command {
 

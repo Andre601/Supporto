@@ -22,7 +22,10 @@ import java.text.MessageFormat;
                 "`member <memberID>` Removes a member from the ticket.\n" +
                 "`role <roleID>` Removes a role from the ticket",
         triggers = {"remove"},
-        attributes = {@CommandAttribute(key = "tickets")}
+        attributes = {
+                @CommandAttribute(key = "staff+"),
+                @CommandAttribute(key = "tickets")
+        }
 )
 
 public class CmdRemove implements Command {
@@ -53,18 +56,6 @@ public class CmdRemove implements Command {
     public void execute(Message msg, String s) {
         Guild guild = msg.getGuild();
         TextChannel tc = msg.getTextChannel();
-        Role staff = getRole(guild, Database.getRoleID(guild));
-
-        if(!PermUtil.isAdmin(tc, msg.getMember())){
-            if(staff == null){
-                EmbedUtil.sendError(msg, "You aren't allowed to add a role!");
-                return;
-            }
-            if(!PermUtil.isStaff(msg.getMember(), staff)){
-                EmbedUtil.sendError(msg, "You aren't allowed to add a role!");
-                return;
-            }
-        }
 
         if(!Database.hasTicket(tc.getId())){
             EmbedUtil.sendError(msg, "Please run this command inside a ticket!");

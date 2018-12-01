@@ -27,7 +27,9 @@ import java.util.concurrent.TimeUnit;
                 "Shows you this help-list\n" +
                 "Add a command at the end, to get more info.",
         triggers = {"help", "commands", "command"},
-        attributes = {@CommandAttribute(key = "bot")}
+        attributes = {
+                @CommandAttribute(key = "bot")
+        }
 )
 public class CmdHelp implements Command {
 

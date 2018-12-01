@@ -1,4 +1,4 @@
-package com.andre601.suggesto.commands.guild;
+package com.andre601.suggesto.commands.tickets;
 
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
@@ -22,7 +22,10 @@ import java.util.List;
                 "`category <set categoryID|reset>` to set or reset the category.\n" +
                 "`role <set roleID|reset>` to set or reset the role.",
         triggers = {"settings", "options"},
-        attributes = {@CommandAttribute(key = "manageServer"), @CommandAttribute(key = "guild")}
+        attributes = {
+                @CommandAttribute(key = "admin_only"),
+                @CommandAttribute(key = "tickets")
+        }
 )
 public class CmdSettings implements Command {
 
