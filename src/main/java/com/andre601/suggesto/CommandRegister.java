@@ -31,13 +31,13 @@ public class CommandRegister {
                 // Guild
                 new CmdGuild(),
                 new CmdRoles(),
-                new CmdSettings(),
                 // Owner
                 new CmdLeave(),
                 new CmdShutdown(),
                 // Tickets
                 new CmdAdd(),
-                new CmdRemove()
+                new CmdRemove(),
+                new CmdSettings()
         );
     }
 
