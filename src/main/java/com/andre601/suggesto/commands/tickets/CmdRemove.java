@@ -2,7 +2,6 @@ package com.andre601.suggesto.commands.tickets;
 
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
-import com.andre601.suggesto.utils.PermUtil;
 import com.github.rainestormee.jdacommand.Command;
 import com.github.rainestormee.jdacommand.CommandAttribute;
 import com.github.rainestormee.jdacommand.CommandDescription;

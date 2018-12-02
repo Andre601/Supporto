@@ -3,14 +3,12 @@ package com.andre601.suggesto.listener;
 import com.andre601.suggesto.Supporto;
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
-import com.andre601.suggesto.utils.LinkUtil;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.awt.*;
-import java.text.MessageFormat;
 
 public class GuildListener extends ListenerAdapter {
 

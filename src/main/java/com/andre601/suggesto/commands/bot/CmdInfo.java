@@ -1,6 +1,5 @@
 package com.andre601.suggesto.commands.bot;
 
-import com.andre601.suggesto.Supporto;
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
 import com.andre601.suggesto.utils.LinkUtil;
@@ -8,7 +7,6 @@ import com.github.rainestormee.jdacommand.Command;
 import com.github.rainestormee.jdacommand.CommandAttribute;
 import com.github.rainestormee.jdacommand.CommandDescription;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.JDAInfo;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;

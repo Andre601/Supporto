@@ -9,10 +9,8 @@ import net.dv8tion.jda.core.events.channel.category.CategoryDeleteEvent;
 import net.dv8tion.jda.core.events.channel.text.TextChannelDeleteEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.core.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
 
 public class ChannelListener extends ListenerAdapter {
