@@ -23,7 +23,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Supporto {
-    
+
     private static Logger logger = (Logger) LoggerFactory.getLogger(Supporto.class);
 
     private static GFile file = new GFile();

@@ -131,21 +131,16 @@ public class CommandListener extends ListenerAdapter {
                     if(command.hasAttribute("staff+")){
                         if(role != null) {
                             if (!PermUtil.isStaff(msg.getMember(), role)) {
-                                EmbedUtil.sendError(
-                                        msg,
-                                        "You need to have Staff-role or `manage server` permission"
-                                );
-                                return;
-                            }else
-                            if(PermUtil.isAdmin(tc, msg.getMember())){
-                                EmbedUtil.sendError(
-                                        msg,
-                                        "You need to have Staff-role or `manage server` permission"
-                                );
-                                return;
+                                if(!PermUtil.isAdmin(tc, msg.getMember())){
+                                    EmbedUtil.sendError(
+                                            msg,
+                                            "You need to have Staff-role or `manage server` permission"
+                                    );
+                                    return;
+                                }
                             }
                         }else
-                        if(PermUtil.isAdmin(tc, msg.getMember())){
+                        if(!PermUtil.isAdmin(tc, msg.getMember())){
                             EmbedUtil.sendError(
                                     msg,
                                     "You need to have Staff-role or `manage server` permission"
