@@ -20,7 +20,9 @@ import java.util.List;
                 "`prefix <set prefix|reset>` to set or reset the prefix.\n" +
                 "`channel <set #channel|reset>` to set or reset the channel.\n" +
                 "`category <set categoryID|reset>` to set or reset the category.\n" +
-                "`role <set roleID|reset>` to set or reset the role.",
+                "`role <set roleID|reset>` to set or reset the role.\n" +
+                "`log <set #channel|reset>` to set or reset the log-channel.\n" +
+                "`dm <on/off>` to enable or disable sending transcript in DM.",
         triggers = {"settings", "options"},
         attributes = {
                 @CommandAttribute(key = "admin_only"),
@@ -38,6 +40,17 @@ public class CmdSettings implements Command {
         }
 
         return support;
+    }
+
+    private TextChannel getLogChannel(Guild guild){
+        TextChannel logChannel;
+        try{
+            logChannel = guild.getTextChannelById(Database.getLogChannel(guild));
+        }catch (Exception ex){
+            logChannel = null;
+        }
+
+        return logChannel;
     }
 
     private Category getSupportCategory(Guild guild){
@@ -89,6 +102,8 @@ public class CmdSettings implements Command {
         TextChannel support = getSupportChannel(msg.getGuild());
         Category category = getSupportCategory(msg.getGuild());
         Role role = getStaffRole(msg.getGuild());
+        String dmSetting = Database.getDMSetting(msg.getGuild());
+        TextChannel logChannel = getLogChannel(msg.getGuild());
 
         EmbedBuilder settings = EmbedUtil.getEmbed(msg.getAuthor())
                 .setTitle("Guild-Settings")
@@ -101,11 +116,16 @@ public class CmdSettings implements Command {
                             "**Support-category**: {2}\n" +
                             "**Staff-role**: {3}\n" +
                             "\n" +
+                            "Sending DM-transcripts: `{4}`\n" +
+                            "Log-channel: {5}\n" +
+                            "\n" +
                             "Type `{0}help settings` to get info on how to change settings.",
                         Database.getPrefix(msg.getGuild()),
                         (support == null ? "`No channel set`" : support.getAsMention()),
                         (category == null ? "`No category set`" : category.getName()),
-                        (role == null ? "`No role set`" : role.getAsMention())
+                        (role == null ? "`No role set`" : role.getAsMention()),
+                        dmSetting,
+                        (logChannel == null ? "`No channel set`" : logChannel.getAsMention())
                 ));
 
         tc.sendMessage(settings.build()).queue();
@@ -290,6 +310,98 @@ public class CmdSettings implements Command {
                     EmbedUtil.sendError(
                             msg,
                             "Please use `set <roleID>` or `reset` to change or reset the staff-role!"
+                    );
+                }
+                break;
+
+            case "log":
+                if(args.length == 1){
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please use `set <#channel>` or `reset` to change or reset the log-channel!"
+                    );
+                    return;
+                }
+                if(args[1].equalsIgnoreCase("set")){
+                    List<TextChannel> channels = msg.getMentionedChannels();
+                    if(!channels.isEmpty()){
+                        Database.setLogChannel(guild, channels.get(0).getId());
+                        EmbedBuilder success = EmbedUtil.getEmbed()
+                                .setColor(Color.GREEN)
+                                .setDescription(MessageFormat.format(
+                                        "Log-channel set to {0}",
+                                        channels.get(0).getAsMention()
+                                ));
+                        tc.sendMessage(success.build()).queue();
+                    }else{
+                        EmbedUtil.sendError(
+                                msg,
+                                "You need to mention a channel!"
+                        );
+                    }
+                }else
+                if(args[1].equalsIgnoreCase("reset")){
+                    Database.setLogChannel(guild, "none");
+                    EmbedBuilder success = EmbedUtil.getEmbed()
+                            .setColor(Color.GREEN)
+                            .setDescription("Channel reseted");
+                    tc.sendMessage(success.build()).queue();
+                }else{
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please use `set <#channel>` or `reset` to change or reset the log-channel!"
+                    );
+                }
+                break;
+
+            case "dm":
+                if(args.length == 1){
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please add `on` or `off` to enable/disable sending of transcripts in DM!"
+                    );
+                    return;
+                }
+                String dmSetting = Database.getDMSetting(guild);
+                if(args[1].equalsIgnoreCase("on")){
+                    if(dmSetting.equalsIgnoreCase("on")){
+                        EmbedUtil.sendError(
+                                msg,
+                                "The settings for sending DMs is already enabled!"
+                        );
+                        return;
+                    }
+
+                    Database.setDMSettings(guild, "on");
+                    EmbedBuilder success = EmbedUtil.getEmbed()
+                            .setColor(Color.GREEN)
+                            .setDescription(
+                                    "Changed DM-Setting to `on`!\n" +
+                                    "The bot will now send transcripts in DM."
+                            );
+                    tc.sendMessage(success.build()).queue();
+                }else
+                if(args[1].equalsIgnoreCase("off")){
+                    if(dmSetting.equalsIgnoreCase("off")){
+                        EmbedUtil.sendError(
+                                msg,
+                                "The settings for sending DMs is already disabled!"
+                        );
+                        return;
+                    }
+
+                    Database.setDMSettings(guild, "off");
+                    EmbedBuilder success = EmbedUtil.getEmbed()
+                            .setColor(Color.GREEN)
+                            .setDescription(
+                                    "Changed DM-Setting to `off`!\n" +
+                                    "The bot will no longer send transcripts in DMs."
+                            );
+                    tc.sendMessage(success.build()).queue();
+                }else{
+                    EmbedUtil.sendError(
+                            msg,
+                            "Please add `on` or `off` to enable/disable sending of transcripts in DM!"
                     );
                 }
                 break;

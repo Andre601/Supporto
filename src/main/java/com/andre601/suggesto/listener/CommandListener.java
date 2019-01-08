@@ -72,6 +72,7 @@ public class CommandListener extends ListenerAdapter {
                     TextChannel support = getSupportChannel(guild);
                     if(support != null)
                         if(tc == support) return;
+                    if(!Database.hasPrefix(msg, guild)) return;
 
                     String prefix = Database.getPrefix(guild);
                     String raw = msg.getContentRaw();
@@ -80,24 +81,30 @@ public class CommandListener extends ListenerAdapter {
                     if(!PermUtil.canSeeHistory(tc)) return;
                     if(!PermUtil.canSendMsg(tc)) return;
 
-                    if(!PermUtil.canEmbedLinks(tc)) {
-                        tc.sendMessage(MessageFormat.format(
-                                "{0} I need permission to embed links in this channel!",
-                                msg.getAuthor().getAsMention()
+                    if(raw.startsWith(event.getJDA().getSelfUser().getAsMention()) &&
+                            raw.length() == event.getJDA().getSelfUser().getAsMention().length()){
+                        tc.sendMessage(String.format(
+                                "%s My prefix on this guild is `%s`\n" +
+                                "You can run `%shelp` for a list of my commands.",
+                                msg.getAuthor().getAsMention(),
+                                prefix,
+                                prefix
                         )).queue();
                         return;
                     }
-                    EmbedBuilder prefixInfo = EmbedUtil.getEmbed()
-                            .setDescription(MessageFormat.format(
-                                    "My prefix on this guild is `{0}`",
-                                    prefix
-                            ));
-                    if(raw.equalsIgnoreCase(guild.getSelfMember().getAsMention())){
-                        tc.sendMessage(prefixInfo.build()).queue();
+
+                    if(raw.startsWith(guild.getSelfMember().getAsMention()) &&
+                            raw.length() == guild.getSelfMember().getAsMention().length()){
+                        tc.sendMessage(String.format(
+                                "%s My prefix on this guild is `%s`\n" +
+                                "You can run `%shelp` for a list of my commands.",
+                                msg.getAuthor().getAsMention(),
+                                prefix,
+                                prefix
+                        )).queue();
                         return;
                     }
 
-                    if(!Database.hasPrefix(msg, guild)) return;
 
                     String[] split = raw.split("\\s+", 2);
                     String commandString;
@@ -115,6 +122,13 @@ public class CommandListener extends ListenerAdapter {
                     Command command = HANDLER.findCommand(commandString.toLowerCase());
                     if(command == null) return;
                     if(command.hasAttribute("owner") && !PermUtil.isOwner(msg)) return;
+                    if(!PermUtil.canEmbedLinks(tc)) {
+                        tc.sendMessage(String.format(
+                                "%s I need permission to embed links in this channel!",
+                                msg.getAuthor().getAsMention()
+                        )).queue();
+                        return;
+                    }
                     if(!PermUtil.canAddReaction(tc)){
                         EmbedUtil.sendError(msg, "I need permissions, to add reactions!");
                         return;

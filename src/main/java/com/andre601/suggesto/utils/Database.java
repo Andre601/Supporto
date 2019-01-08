@@ -30,6 +30,8 @@ public class Database {
                                 .with("ticket_category", "none")
                                 .with("prefix", "t_")
                                 .with("staff_role", "none")
+                                .with("log_channel", "none")
+                                .with("dm", "on")
                 )
         ).optArg("conflict", "update").run(conn);
     }
@@ -90,6 +92,10 @@ public class Database {
         r.table(ticketsTable).get(channelID).delete().run(conn);
     }
 
+    public static void deleteGuild(Guild guild){
+        r.table(guildTable).get(guild.getId()).delete().run(conn);
+    }
+
     public static String getMessageID(String channelID){
         Map channel = getTicket(channelID);
         return channel.get("message_id").toString();
@@ -134,17 +140,40 @@ public class Database {
         r.table(guildTable).get(guild.getId()).update(r.hashMap("ticket_category", id)).run(conn);
     }
 
-    public static boolean hasCategory(Guild g){
-        Map guild = getGuild(g);
-        return !guild.get("ticket_category").equals("none");
-    }
-
     public static boolean hasTicket(String id){
         return getTicket(id) != null;
     }
 
     private static Map<String, Object> getStats(String key){
         return r.table(statsTable).get(key).run(conn);
+    }
+
+    public static boolean hasLogChannel(Guild guild){
+        Map g = getGuild(guild);
+        return g.get("log_channel") != null;
+    }
+
+    public static void setLogChannel(Guild guild, String id){
+        r.table(guildTable).get(guild.getId()).update(r.hashMap("log_channel", id)).run(conn);
+    }
+
+    public static String getLogChannel(Guild guild){
+        if(!hasLogChannel(guild)) return "none";
+
+        Map g = getGuild(guild);
+        return g.get("log_channel").toString();
+    }
+
+    public static String getDMSetting(Guild guild){
+        Map g = getGuild(guild);
+
+        if(g.get("dm") == null) return "on";
+
+        return g.get("dm").toString();
+    }
+
+    public static void setDMSettings(Guild guild, String setting){
+        r.table(guildTable).get(guild.getId()).update(r.hashMap("dm", setting)).run(conn);
     }
 
     public static String getTotalTickets(){

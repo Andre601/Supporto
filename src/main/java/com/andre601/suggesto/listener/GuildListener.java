@@ -26,6 +26,7 @@ public class GuildListener extends ListenerAdapter {
     public void onGuildLeave(GuildLeaveEvent event){
         Guild guild = event.getGuild();
 
+        Database.deleteGuild(guild);
         EmbedUtil.sendWebhook(getWebhookURL(), guild, Color.RED, "Left Guild");
     }
 

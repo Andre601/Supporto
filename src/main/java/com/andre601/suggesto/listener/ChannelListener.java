@@ -68,7 +68,21 @@ public class ChannelListener extends ListenerAdapter {
         if(!PermUtil.canManageChannels(tc)) {
             EmbedUtil.sendError(msg,
                     "I can't create a ticket due to a lack of permissions!\n" +
-                    "I need `manage channel` permissions."
+                    "**Required permission**: `manage channels`\n" +
+                    "\n" +
+                    "If you're an admin of this guild, make sure I have the right permissions (including the category" +
+                    "where the tickets are saved)"
+            );
+            return;
+        }
+        if(!PermUtil.canManageMsg(tc)){
+            EmbedUtil.sendError(
+                    msg,
+                    "I can't create a ticket due to a lack of permissions!\n" +
+                    "**Required permission**: `manage messages`" +
+                    "\n" +
+                    "If you're an admin of this guild, make sure I have the right permissions (including the category" +
+                    "where the tickets are saved)"
             );
             return;
         }
@@ -114,8 +128,7 @@ public class ChannelListener extends ListenerAdapter {
             Database.setSupportChannel(guild, "none");
             return;
         }
-        if(Database.hasTicket(tc.getId()))
-            TicketUtil.removeTicket(tc.getId());
+        if(Database.hasTicket(tc.getId())) TicketUtil.closeTicket(guild, tc, null, true);
     }
 
     public void onCategoryDelete(CategoryDeleteEvent event){

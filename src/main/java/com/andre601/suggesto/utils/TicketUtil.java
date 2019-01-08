@@ -70,26 +70,30 @@ public class TicketUtil {
                     "Create ticket #%s",
                     ticketID
             )).complete();
-            support.createPermissionOverride(author).setAllow(
-                    Permission.VIEW_CHANNEL,
-                    Permission.MESSAGE_WRITE,
-                    Permission.MESSAGE_READ,
-                    Permission.MESSAGE_HISTORY,
-                    Permission.MESSAGE_EMBED_LINKS,
-                    Permission.MESSAGE_ATTACH_FILES,
-                    Permission.MESSAGE_ADD_REACTION,
-                    Permission.MESSAGE_EXT_EMOJI
-            ).queue();
-            support.createPermissionOverride(guild.getSelfMember()).setAllow(
-                    Permission.MESSAGE_MANAGE,
-                    Permission.MANAGE_CHANNEL,
-                    Permission.MANAGE_ROLES,
-                    Permission.MESSAGE_EMBED_LINKS,
-                    Permission.MESSAGE_READ,
-                    Permission.MESSAGE_WRITE,
-                    Permission.MESSAGE_HISTORY,
-                    Permission.MESSAGE_ADD_REACTION
-            ).queue();
+            if(support.getPermissionOverride(author) == null)
+                support.createPermissionOverride(author).setAllow(
+                        Permission.VIEW_CHANNEL,
+                        Permission.MESSAGE_WRITE,
+                        Permission.MESSAGE_READ,
+                        Permission.MESSAGE_HISTORY,
+                        Permission.MESSAGE_EMBED_LINKS,
+                        Permission.MESSAGE_ATTACH_FILES,
+                        Permission.MESSAGE_ADD_REACTION,
+                        Permission.MESSAGE_EXT_EMOJI
+                ).queue();
+
+            if(support.getPermissionOverride(guild.getSelfMember()) == null)
+                support.createPermissionOverride(guild.getSelfMember()).setAllow(
+                        Permission.MESSAGE_MANAGE,
+                        Permission.MANAGE_CHANNEL,
+                        Permission.MANAGE_ROLES,
+                        Permission.MESSAGE_EMBED_LINKS,
+                        Permission.MESSAGE_READ,
+                        Permission.MESSAGE_WRITE,
+                        Permission.MESSAGE_HISTORY,
+                        Permission.MESSAGE_ADD_REACTION
+                ).queue();
+
             support.putPermissionOverride(guild.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
 
             EmbedBuilder ticket = EmbedUtil.getEmbed()
@@ -140,26 +144,32 @@ public class TicketUtil {
                     "Create ticket #%s",
                     ticketID
             )).complete();
-            support.createPermissionOverride(author).setAllow(
-                    Permission.VIEW_CHANNEL,
-                    Permission.MESSAGE_WRITE,
-                    Permission.MESSAGE_READ,
-                    Permission.MESSAGE_HISTORY,
-                    Permission.MESSAGE_EMBED_LINKS,
-                    Permission.MESSAGE_ATTACH_FILES,
-                    Permission.MESSAGE_ADD_REACTION,
-                    Permission.MESSAGE_EXT_EMOJI
-            ).queue();
-            support.createPermissionOverride(guild.getSelfMember()).setAllow(
-                    Permission.MESSAGE_MANAGE,
-                    Permission.MANAGE_CHANNEL,
-                    Permission.MANAGE_ROLES,
-                    Permission.MESSAGE_EMBED_LINKS,
-                    Permission.MESSAGE_READ,
-                    Permission.MESSAGE_WRITE,
-                    Permission.MESSAGE_HISTORY,
-                    Permission.MESSAGE_ADD_REACTION
-            ).queue();
+
+
+            if(support.getPermissionOverride(author) == null)
+                support.createPermissionOverride(author).setAllow(
+                        Permission.VIEW_CHANNEL,
+                        Permission.MESSAGE_WRITE,
+                        Permission.MESSAGE_READ,
+                        Permission.MESSAGE_HISTORY,
+                        Permission.MESSAGE_EMBED_LINKS,
+                        Permission.MESSAGE_ATTACH_FILES,
+                        Permission.MESSAGE_ADD_REACTION,
+                        Permission.MESSAGE_EXT_EMOJI
+                ).queue();
+
+            if(support.getPermissionOverride(guild.getSelfMember()) == null)
+                support.createPermissionOverride(guild.getSelfMember()).setAllow(
+                        Permission.MESSAGE_MANAGE,
+                        Permission.MANAGE_CHANNEL,
+                        Permission.MANAGE_ROLES,
+                        Permission.MESSAGE_EMBED_LINKS,
+                        Permission.MESSAGE_READ,
+                        Permission.MESSAGE_WRITE,
+                        Permission.MESSAGE_HISTORY,
+                        Permission.MESSAGE_ADD_REACTION
+                ).queue();
+
             support.putPermissionOverride(guild.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
 
             EmbedBuilder ticket = EmbedUtil.getEmbed()
@@ -191,6 +201,8 @@ public class TicketUtil {
                 Database.saveTicket(support.getId(), message.getId(), author.getUser().getId(), ticketID);
             });
         }
+
+        LogUtil.ticketCreate(support, author);
     }
 
     public static void performClose(Guild guild, User closer, String channelID){
@@ -225,7 +237,7 @@ public class TicketUtil {
                             ev.getAuthor() == closer
                     ),
                     ev -> {
-                        closeTicket(guild, ticket, closer);
+                        closeTicket(guild, ticket, closer, false);
                         queued.remove(closer);
                     },
                     30, TimeUnit.SECONDS,
@@ -243,88 +255,18 @@ public class TicketUtil {
         });
     }
 
-    public static void closeTicket(Guild guild, TextChannel ticket, User closer){
+    public static void closeTicket(Guild guild, TextChannel ticket, User closer, boolean manual){
 
-        MessageHistory history = ticket.getHistory();
-        while(history.retrievePast(100).complete().size() > 0);
+        LogUtil.ticketClose(ticket, closer == null ? null : guild.getMember(closer));
+        LogUtil.sendTranscript(ticket);
 
-        List<String> transcripts = new LinkedList<>();
-        List<String> transcriptFile = new LinkedList<>();
-        for(Message message : history.getRetrievedHistory()){
-            String timestamp = MessageUtil.formatTime(LocalDateTime.from(message.getCreationTime()));
-            transcripts.add(String.format(
-                    "`[%s]` **%s**: %s",
-                    timestamp,
-                    message.getAuthor().getName(),
-                    message.getContentDisplay()
-            ));
-            transcriptFile.add(String.format(
-                    "[%s] %s: %s",
-                    timestamp,
-                    message.getAuthor().getName(),
-                    message.getContentDisplay().replace("\n", "\r\n")
-            ));
-        }
-        Collections.reverse(transcripts);
-        Collections.reverse(transcriptFile);
-
-        List<String> transcriptsMsg = new LinkedList<>();
-        List<String> messageList = new LinkedList<>();
-
-        for(String message : transcripts){
-            if(messageList.stream().mapToInt(String::length).sum() + messageList.size() + message.length() + 1 > 1992){
-                transcriptsMsg.add(String.join("\n", messageList));
-                messageList.clear();
-            }
-            messageList.add(message);
-        }
-        if(messageList.size() > 0){
-            transcriptsMsg.add(String.join("\n", messageList));
-        }
-
-        StringBuilder builder = new StringBuilder();
-        for(String message : transcriptFile){
-            builder.append(message).append("\r\n");
-        }
-
-        List<User> users = history.getRetrievedHistory().stream().map(Message::getAuthor).filter(user -> !user.isBot())
-                .distinct().collect(Collectors.toList());
-
-        InputStream is;
-        try {
-            is = new ByteArrayInputStream(builder.toString().getBytes("UTF-8"));
-        }catch (Exception ex){
-            is = null;
-        }
-
-        final InputStream input = is;
-        users.stream().filter(user -> !user.isFake()).map(User::openPrivateChannel).map(RestAction::complete)
-                .forEach(pm -> {
-                    pm.sendMessage(String.format(
-                            "The ticket `%s` in the guild `%s` was closed!\n" +
-                            "Here's a transcript of the chat:",
-                            ticket.getName(),
-                            guild.getName()
-                    )).queue();
-                    for(String transcriptMsg : transcriptsMsg){
-                        pm.sendMessage(transcriptMsg).queue();
-                    }
-                    if(input != null){
-                        pm.sendFile(input, String.format(
-                                "%s.txt",
-                                ticket.getName()
-                        )).queue();
-                    }
-                });
-
-        ticket.delete().reason(MessageFormat.format(
-                "Ticket closed by {0}",
-                closer.getName()
-        )).queue();
         Database.deleteTicket(ticket.getId());
-    }
 
-    public static void removeTicket(String channelID){
-        Database.deleteTicket(channelID);
+        if(manual) return;
+
+        ticket.delete().reason(String.format(
+                "Ticket closed by %s",
+                closer == null ? "Unknown user" : closer.getName()
+        )).queue();
     }
 }

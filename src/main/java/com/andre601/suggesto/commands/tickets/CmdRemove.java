@@ -2,6 +2,7 @@ package com.andre601.suggesto.commands.tickets;
 
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
+import com.andre601.suggesto.utils.LogUtil;
 import com.github.rainestormee.jdacommand.Command;
 import com.github.rainestormee.jdacommand.CommandAttribute;
 import com.github.rainestormee.jdacommand.CommandDescription;
@@ -108,6 +109,8 @@ public class CmdRemove implements Command {
                                 member.getAsMention()
                         ));
                 tc.sendMessage(memberSuccess.build()).queue();
+
+                LogUtil.memberRemove(tc, guild.getMember(msg.getAuthor()), member);
                 break;
 
             case "role":
@@ -149,6 +152,8 @@ public class CmdRemove implements Command {
                                 role.getAsMention()
                         ));
                 tc.sendMessage(roleSuccess.build()).queue();
+
+                LogUtil.roleRemove(tc, guild.getMember(msg.getAuthor()), role);
                 break;
 
             default:
