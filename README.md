@@ -83,7 +83,7 @@ Lets you remove a member or role from the ticket.
 **Alias**:
 - Options
 
-The settings command is the main-command for changing certain settings (obviously).
+The settings command is the main-command for changing certain settings (obviously).  
 The syntax is `t_settings <subcommand>` where `<subcommand>` is one of the below options.
 
 **Subcommands**:
