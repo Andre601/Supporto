@@ -129,6 +129,9 @@ public class ChannelListener extends ListenerAdapter {
             return;
         }
         if(Database.hasTicket(tc.getId())) TicketUtil.closeTicket(guild, tc, null, true);
+        if(Database.hasLogChannel(guild)){
+            if(tc.getId().equals(Database.getLogChannel(guild))) Database.setLogChannel(guild, "none");
+        }
     }
 
     public void onCategoryDelete(CategoryDeleteEvent event){

@@ -83,11 +83,13 @@ Lets you remove a member or role from the ticket.
 **Alias**:
 - Options
 
-Lets you change different settings of the bot.  
-This command requires you to have the `manage server` permission!
+The settings command is the main-command for changing certain settings (obviously).
+The syntax is `t_settings <subcommand>` where `<subcommand>` is one of the below options.
 
 **Subcommands**:
 - `prefix <set <prefix>|reset>` Set or reset the prefix.
 - `channel <set <#channel>|reset>` Set or reset a channel as ticket-channel.
 - `category <set <categoryID>|reset>` Set or reset a category for creating tickets in it.
 - `role <set <roleID>|reset>` Set or reset a role, that should be able to close tickets.
+- `log <set <#channel>|reset>` Set or reset a channel for logging ticket-actions (creating tickets, deleting tickets, etc.)
+- `dm <on|off>` Enable/Disable sending the transcript in DM, when a ticket is closed (default is on)

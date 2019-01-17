@@ -226,13 +226,13 @@ public class LogUtil {
         EmbedBuilder memberAdd = EmbedUtil.getEmbed()
                 .setTitle(Emotes.MEMBER_REMOVE + " Member removed")
                 .addField("Ticket:", ticket.getName(), false)
-                .addField("Added Member:", String.format(
+                .addField("Removed Member:", String.format(
                         "%s | %s#%s",
                         member.getAsMention(),
                         member.getUser().getName(),
                         member.getUser().getDiscriminator()
                 ), false)
-                .addField("Added by:", String.format(
+                .addField("Removed by:", String.format(
                         "%s | %s#%s",
                         executor.getAsMention(),
                         executor.getUser().getName(),
