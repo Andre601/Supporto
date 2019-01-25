@@ -17,6 +17,7 @@ import java.util.List;
         description =
                 "Change settings of the bot.\n" +
                 "\n" +
+                "Sub-commands:\n" +
                 "`prefix <set prefix|reset>` to set or reset the prefix.\n" +
                 "`channel <set #channel|reset>` to set or reset the channel.\n" +
                 "`category <set categoryID|reset>` to set or reset the category.\n" +
@@ -194,7 +195,10 @@ public class CmdSettings implements Command {
                         EmbedBuilder success = EmbedUtil.getEmbed()
                                 .setColor(Color.GREEN)
                                 .setDescription(MessageFormat.format(
-                                        "Channel set to {0}",
+                                        "Channel set to {0}\n" +
+                                        "\n" +
+                                        "Remember, that people with `manage server` permission or a registered staff-" +
+                                        "role need to type `!create` in their ticket-channel, to create a ticket!",
                                         channels.get(0).getAsMention()
                                 ));
                         tc.sendMessage(success.build()).queue();

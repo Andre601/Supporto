@@ -6,15 +6,9 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.requests.RestAction;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class TicketUtil {
 
@@ -94,8 +88,6 @@ public class TicketUtil {
                         Permission.MESSAGE_ADD_REACTION
                 ).queue();
 
-            support.putPermissionOverride(guild.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
-
             EmbedBuilder ticket = EmbedUtil.getEmbed()
                     .setTitle(String.format(
                             "Ticket #%s",
@@ -169,8 +161,6 @@ public class TicketUtil {
                         Permission.MESSAGE_HISTORY,
                         Permission.MESSAGE_ADD_REACTION
                 ).queue();
-
-            support.putPermissionOverride(guild.getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
 
             EmbedBuilder ticket = EmbedUtil.getEmbed()
                     .setTitle(String.format(

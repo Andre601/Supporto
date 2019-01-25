@@ -123,6 +123,8 @@ public class LogUtil {
         TextChannel logChannel = getLogChannel(ticket.getGuild());
 
         if(logChannel == null) return;
+        if(!PermUtil.canSeeChannel(logChannel)) return;
+        if(!PermUtil.canSendMsg(logChannel)) return;
 
         EmbedBuilder logEmbed = EmbedUtil.getEmbed()
                 .setTitle(Emotes.CHANNEL_CREATE + " Ticket created")
@@ -143,6 +145,8 @@ public class LogUtil {
         TextChannel logChannel = getLogChannel(ticket.getGuild());
 
         if(logChannel == null) return;
+        if(!PermUtil.canSeeChannel(logChannel)) return;
+        if(!PermUtil.canSendMsg(logChannel)) return;
 
         Member creator = getTicketAuthor(ticket.getGuild(), ticket);
 
@@ -171,6 +175,8 @@ public class LogUtil {
         TextChannel logChannel = getLogChannel(ticket.getGuild());
 
         if(logChannel == null) return;
+        if(!PermUtil.canSeeChannel(logChannel)) return;
+        if(!PermUtil.canSendMsg(logChannel)) return;
 
         EmbedBuilder memberAdd = EmbedUtil.getEmbed()
                 .setTitle(Emotes.MEMBER_ADD + " Member added")
@@ -197,6 +203,8 @@ public class LogUtil {
         TextChannel logChannel = getLogChannel(ticket.getGuild());
 
         if(logChannel == null) return;
+        if(!PermUtil.canSeeChannel(logChannel)) return;
+        if(!PermUtil.canSendMsg(logChannel)) return;
 
         EmbedBuilder memberAdd = EmbedUtil.getEmbed()
                 .setTitle(Emotes.ROLE_ADD + " Role added")
@@ -222,6 +230,8 @@ public class LogUtil {
         TextChannel logChannel = getLogChannel(ticket.getGuild());
 
         if(logChannel == null) return;
+        if(!PermUtil.canSeeChannel(logChannel)) return;
+        if(!PermUtil.canSendMsg(logChannel)) return;
 
         EmbedBuilder memberAdd = EmbedUtil.getEmbed()
                 .setTitle(Emotes.MEMBER_REMOVE + " Member removed")
@@ -248,6 +258,8 @@ public class LogUtil {
         TextChannel logChannel = getLogChannel(ticket.getGuild());
 
         if(logChannel == null) return;
+        if(!PermUtil.canSeeChannel(logChannel)) return;
+        if(!PermUtil.canSendMsg(logChannel)) return;
 
         EmbedBuilder memberAdd = EmbedUtil.getEmbed()
                 .setTitle(Emotes.ROLE_REMOVE + " Role removed")

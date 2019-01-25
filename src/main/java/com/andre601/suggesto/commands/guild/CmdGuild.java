@@ -31,23 +31,30 @@ public class CmdGuild implements Command {
         EmbedBuilder guildInfo = EmbedUtil.getEmbed(msg.getAuthor())
                 .setTitle(guild.getName())
                 .setThumbnail(guild.getIconUrl())
-                .addField("Users", MessageFormat.format(
-                        "**Total**: {0}\n" +
+                .addField("Users", String.format(
+                        "**Total**: %d\n" +
                         "\n" +
-                        "**Humans**: {1}\n" +
-                        "**Bots**: {2}",
+                        "**Humans**: %d\n" +
+                        "**Bots**: %d",
                         guild.getMembers().size(),
                         guild.getMembers().stream().filter(user -> !user.getUser().isBot()).count(),
                         guild.getMembers().stream().filter(user -> user.getUser().isBot()).count()
                 ), true)
-                .addField("Region", MessageFormat.format(
-                        "{0} {1}",
+                .addField("Region", String.format(
+                        "%s %s",
                         guild.getRegion().getEmoji(),
                         guild.getRegion().getName()
                 ), true)
                 .addField("Level", guild.getVerificationLevel().name().toLowerCase(), true)
-                .addField("Owner", guild.getOwner().getAsMention(), true)
-                .addField("Created", MessageUtil.formatTime(LocalDateTime.from(guild.getCreationTime())), true);
+                .addField("Owner", String.format(
+                        "%s | %s",
+                        guild.getOwner().getAsMention(),
+                        MessageUtil.getTag(guild.getOwner().getUser())
+                ), true)
+                .addField("Created", String.format(
+                        "`%s`",
+                        MessageUtil.formatTime(LocalDateTime.from(guild.getCreationTime()))
+                ), true);
 
         tc.sendMessage(guildInfo.build()).queue();
     }
