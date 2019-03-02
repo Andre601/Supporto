@@ -66,7 +66,6 @@ public class TicketUtil {
             )).complete();
             if(support.getPermissionOverride(author) == null)
                 support.createPermissionOverride(author).setAllow(
-                        Permission.VIEW_CHANNEL,
                         Permission.MESSAGE_WRITE,
                         Permission.MESSAGE_READ,
                         Permission.MESSAGE_HISTORY,
@@ -74,7 +73,7 @@ public class TicketUtil {
                         Permission.MESSAGE_ATTACH_FILES,
                         Permission.MESSAGE_ADD_REACTION,
                         Permission.MESSAGE_EXT_EMOJI
-                ).queue();
+                ).reason("Add Ticket-Author to ticket").queue();
 
             if(support.getPermissionOverride(guild.getSelfMember()) == null)
                 support.createPermissionOverride(guild.getSelfMember()).setAllow(
@@ -86,7 +85,7 @@ public class TicketUtil {
                         Permission.MESSAGE_WRITE,
                         Permission.MESSAGE_HISTORY,
                         Permission.MESSAGE_ADD_REACTION
-                ).queue();
+                ).reason("Add Bot to ticket").queue();
 
             EmbedBuilder ticket = EmbedUtil.getEmbed()
                     .setTitle(String.format(
@@ -140,7 +139,6 @@ public class TicketUtil {
 
             if(support.getPermissionOverride(author) == null)
                 support.createPermissionOverride(author).setAllow(
-                        Permission.VIEW_CHANNEL,
                         Permission.MESSAGE_WRITE,
                         Permission.MESSAGE_READ,
                         Permission.MESSAGE_HISTORY,
@@ -148,7 +146,7 @@ public class TicketUtil {
                         Permission.MESSAGE_ATTACH_FILES,
                         Permission.MESSAGE_ADD_REACTION,
                         Permission.MESSAGE_EXT_EMOJI
-                ).queue();
+                ).reason("Add Ticket-Author to the Ticket").queue();
 
             if(support.getPermissionOverride(guild.getSelfMember()) == null)
                 support.createPermissionOverride(guild.getSelfMember()).setAllow(
@@ -160,7 +158,7 @@ public class TicketUtil {
                         Permission.MESSAGE_WRITE,
                         Permission.MESSAGE_HISTORY,
                         Permission.MESSAGE_ADD_REACTION
-                ).queue();
+                ).reason("Add Bot to the Ticket").queue();
 
             EmbedBuilder ticket = EmbedUtil.getEmbed()
                     .setTitle(String.format(

@@ -1,9 +1,9 @@
-package com.andre601.suggesto.utils;
+package com.andre601.suggesto.utils.constants;
 
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
 
-public final class LinkUtil {
+public final class Links {
 
     public static String INVITE_BOT(JDA jda){
         return jda.asBot().getInviteUrl(

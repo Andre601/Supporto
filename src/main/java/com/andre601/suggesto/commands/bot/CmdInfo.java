@@ -2,7 +2,7 @@ package com.andre601.suggesto.commands.bot;
 
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
-import com.andre601.suggesto.utils.LinkUtil;
+import com.andre601.suggesto.utils.constants.Links;
 import com.github.rainestormee.jdacommand.Command;
 import com.github.rainestormee.jdacommand.CommandAttribute;
 import com.github.rainestormee.jdacommand.CommandDescription;
@@ -29,7 +29,7 @@ public class CmdInfo implements Command {
         EmbedBuilder info = EmbedUtil.getEmbed(msg.getAuthor())
                 .setAuthor(
                         msg.getJDA().getSelfUser().getName(),
-                        LinkUtil.INVITE_BOT(msg.getJDA()),
+                        Links.INVITE_BOT(msg.getJDA()),
                         msg.getJDA().getSelfUser().getEffectiveAvatarUrl()
                 )
                 .setThumbnail(msg.getJDA().getSelfUser().getEffectiveAvatarUrl())

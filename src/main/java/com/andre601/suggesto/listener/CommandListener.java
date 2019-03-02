@@ -3,11 +3,10 @@ package com.andre601.suggesto.listener;
 import com.andre601.suggesto.Supporto;
 import com.andre601.suggesto.utils.Database;
 import com.andre601.suggesto.utils.EmbedUtil;
-import com.andre601.suggesto.utils.LinkUtil;
+import com.andre601.suggesto.utils.constants.Links;
 import com.andre601.suggesto.utils.PermUtil;
 import com.github.rainestormee.jdacommand.Command;
 import com.github.rainestormee.jdacommand.CommandHandler;
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.Role;
@@ -15,7 +14,6 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.text.MessageFormat;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -176,7 +174,7 @@ public class CommandListener extends ListenerAdapter {
                                         "\n" +
                                         "Cause of error:\n" +
                                         "`%s`",
-                                        LinkUtil.INVITE_GUILD,
+                                        Links.INVITE_GUILD,
                                         ex.getMessage()
 
                                 )

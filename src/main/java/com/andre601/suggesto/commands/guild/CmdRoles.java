@@ -24,7 +24,7 @@ public class CmdRoles implements Command {
     private Paginator.Builder builder;
 
     private String getRoleName(Role role){
-        return String.format("%-20s %s", role.getName(), role.getId());
+        return String.format("%-27s %s", role.getName(), role.getId());
     }
 
     private void addPage(String msg){
@@ -33,7 +33,7 @@ public class CmdRoles implements Command {
                 "\n" +
                 "**Roles**:\n" +
                 "```yaml\n" +
-                "Name:                ID:\n" +
+                "Name:                       ID:\n" +
                 "\n" +
                 "{0}" +
                 "```",

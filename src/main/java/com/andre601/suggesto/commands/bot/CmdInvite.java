@@ -2,7 +2,7 @@ package com.andre601.suggesto.commands.bot;
 
 import com.andre601.suggesto.listener.ReadyListener;
 import com.andre601.suggesto.utils.EmbedUtil;
-import com.andre601.suggesto.utils.LinkUtil;
+import com.andre601.suggesto.utils.constants.Links;
 import com.github.rainestormee.jdacommand.Command;
 import com.github.rainestormee.jdacommand.CommandAttribute;
 import com.github.rainestormee.jdacommand.CommandDescription;
@@ -38,9 +38,9 @@ public class CmdInvite implements Command {
                         "[`Bot-Invite`]({0})\n" +
                         "[`Support-Guild`]({1})\n" +
                         "[`GitHub`]({2})",
-                        LinkUtil.INVITE_BOT(ReadyListener.getJda()),
-                        LinkUtil.INVITE_GUILD,
-                        LinkUtil.GITHUB
+                        Links.INVITE_BOT(ReadyListener.getJda()),
+                        Links.INVITE_GUILD,
+                        Links.GITHUB
                 ));
 
         tc.sendMessage(invite.build()).queue();
