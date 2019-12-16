@@ -1,0 +1,6 @@
+{
+  "bot-token": "TOKEN",
+  "beta": "false",
+
+  "guild-webhook": "webhook-url"
+}
