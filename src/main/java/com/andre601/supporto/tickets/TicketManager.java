@@ -43,85 +43,100 @@ public class TicketManager {
         bot.getDbUtil().updateTicketId(guild.getId());
 
         if(category == null){
-            guild.createTextChannel(String.format(
-                    "ticket-%d",
-                    ticketId
-            )).setTopic(String.format(
-                    "Author: %s (%s)\n" +
-                    "Reason: %s",
-                    member.getEffectiveName(),
-                    member.getId(),
-                    reason
-            )).reason(String.format(
-                    "Creating ticket for %s",
-                    member.getEffectiveName()
-            )).queue(channel -> {
-                channel.upsertPermissionOverride(member).setAllow(
-                        Permission.MESSAGE_WRITE,
-                        Permission.MESSAGE_EMBED_LINKS,
-                        Permission.MESSAGE_ATTACH_FILES,
-                        Permission.MESSAGE_ADD_REACTION,
-                        Permission.MESSAGE_EXT_EMOJI,
-                        Permission.MESSAGE_HISTORY
-                ).reason("Creating permission override for ticket-author.").queue();
-                channel.upsertPermissionOverride(guild.getSelfMember()).setAllow(
-                        Permission.MESSAGE_WRITE,
-                        Permission.MESSAGE_EMBED_LINKS,
-                        Permission.MESSAGE_ATTACH_FILES,
-                        Permission.MESSAGE_ADD_REACTION,
-                        Permission.MESSAGE_EXT_EMOJI,
-                        Permission.MESSAGE_HISTORY,
-                        Permission.MANAGE_CHANNEL,
-                        Permission.MESSAGE_MANAGE
-                ).reason("Setting Bots permissions.").queue();
-                channel.sendMessage(member.getAsMention()).embed(getEmbed(String.format(
-                        "ticket-%d",
-                        ticketId
-                ), reason, member)).queue(message -> {
-                    message.pin().queue();
-                    message.addReaction("\u2705").queue();
-                });
-            });
+            guild.createTextChannel(String.format("ticket-%d", ticketId))
+                    .addPermissionOverride(
+                            member,
+                            Permission.getRaw(
+                                    Permission.MESSAGE_WRITE,
+                                    Permission.MESSAGE_EMBED_LINKS,
+                                    Permission.MESSAGE_ATTACH_FILES,
+                                    Permission.MESSAGE_ADD_REACTION,
+                                    Permission.MESSAGE_EXT_EMOJI,
+                                    Permission.MESSAGE_HISTORY
+                            ),
+                            0
+                    )
+                    .addPermissionOverride(
+                            guild.getSelfMember(),
+                            Permission.getRaw(
+                                    Permission.MESSAGE_WRITE,
+                                    Permission.MESSAGE_EMBED_LINKS,
+                                    Permission.MESSAGE_ATTACH_FILES,
+                                    Permission.MESSAGE_ADD_REACTION,
+                                    Permission.MESSAGE_EXT_EMOJI,
+                                    Permission.MESSAGE_HISTORY,
+                                    Permission.MANAGE_CHANNEL,
+                                    Permission.MESSAGE_MANAGE
+                            ),
+                            0
+                    )
+                    .setTopic(String.format(
+                        "Author: %s (%s)\n" +
+                        "Reason: %s",
+                        member.getEffectiveName(),
+                        member.getId(),
+                        reason
+                    ))
+                    .reason(String.format(
+                            "Creating ticket for %s",
+                            member.getEffectiveName()
+                    )).queue(channel -> { 
+                        channel.sendMessage(member.getAsMention()).embed(getEmbed(String.format(
+                                "ticket-%d", 
+                                ticketId
+                        ), reason, member)).queue(message -> { 
+                            message.pin().queue();
+                            message.addReaction("\u2705").queue(); 
+                        }); 
+                    });
         }else{
-            category.createTextChannel(String.format(
-                    "ticket-%d",
-                    ticketId
-            )).setTopic(String.format(
-                    "Author: %s (%s)\n" +
-                    "Reason: %s",
-                    member.getEffectiveName(),
-                    member.getId(),
-                    reason
-            )).reason(String.format(
-                    "Creating ticket for %s",
-                    member.getEffectiveName()
-            )).queue(channel -> {
-                channel.upsertPermissionOverride(member).setAllow(
-                        Permission.MESSAGE_WRITE,
-                        Permission.MESSAGE_EMBED_LINKS,
-                        Permission.MESSAGE_ATTACH_FILES,
-                        Permission.MESSAGE_ADD_REACTION,
-                        Permission.MESSAGE_EXT_EMOJI,
-                        Permission.MESSAGE_HISTORY
-                ).reason("Creating permission override for ticket-author.").queue();
-                channel.upsertPermissionOverride(guild.getSelfMember()).setAllow(
-                        Permission.MESSAGE_WRITE,
-                        Permission.MESSAGE_EMBED_LINKS,
-                        Permission.MESSAGE_ATTACH_FILES,
-                        Permission.MESSAGE_ADD_REACTION,
-                        Permission.MESSAGE_EXT_EMOJI,
-                        Permission.MESSAGE_HISTORY,
-                        Permission.MANAGE_CHANNEL,
-                        Permission.MESSAGE_MANAGE
-                ).reason("Setting Bots permissions.").queue();
-                channel.sendMessage(member.getAsMention()).embed(getEmbed(String.format(
-                        "ticket-%d",
-                        ticketId
-                ), reason, member)).queue(message -> {
-                    message.pin().queue();
-                    message.addReaction("\u2705").queue();
-                });
-            });
+            category.createTextChannel(String.format("ticket-%d", ticketId))
+                    .addPermissionOverride(
+                            member, 
+                            Permission.getRaw(
+                                    Permission.MESSAGE_WRITE,
+                                    Permission.MESSAGE_EMBED_LINKS,
+                                    Permission.MESSAGE_ATTACH_FILES,
+                                    Permission.MESSAGE_ADD_REACTION,
+                                    Permission.MESSAGE_EXT_EMOJI,
+                                    Permission.MESSAGE_HISTORY
+                            ), 
+                            0
+                    )
+                    .addPermissionOverride(
+                            guild.getSelfMember(),
+                            Permission.getRaw(
+                                    Permission.MESSAGE_WRITE,
+                                    Permission.MESSAGE_EMBED_LINKS,
+                                    Permission.MESSAGE_ATTACH_FILES,
+                                    Permission.MESSAGE_ADD_REACTION,
+                                    Permission.MESSAGE_EXT_EMOJI,
+                                    Permission.MESSAGE_HISTORY,
+                                    Permission.MANAGE_CHANNEL,
+                                    Permission.MESSAGE_MANAGE
+                            ),
+                            0
+                    )
+                    .setTopic(String.format(
+                            "Author: %s (%s)\n" + 
+                            "Reason: %s",
+                            member.getEffectiveName(),
+                            member.getId(),
+                            reason
+                    ))
+                    .reason(String.format(
+                            "Creating ticket %d for %s",
+                            ticketId,
+                            member.getEffectiveName()
+                    )).queue(channel -> { 
+                        channel.sendMessage(member.getAsMention()).embed(getEmbed(String.format(
+                                "ticket-%d", 
+                                ticketId
+                        ), reason, member)).queue(message -> {
+                            message.pin().queue();
+                            message.addReaction("\u2705").queue();
+                        });
+                    });
         }
     }
     
@@ -137,14 +152,25 @@ public class TicketManager {
                 .build();
         
         tc.delete().queue();
-        if(bot.isDmEnabled(guildId)) 
+        if(bot.isDmEnabled(guildId)){
             author.getUser().openPrivateChannel().queue(pm -> pm.sendMessage(embed).queue(
-                    msg -> bot.getLogUtil().sendCloseEmbed(tc, name, author, true, closer)), 
+                    msg -> bot.getLogUtil().sendCloseEmbed(tc, name, author, true, closer)),
                     throwable -> bot.getLogUtil().sendCloseEmbed(tc, name, author, false, closer)
             );
+            return;
+        }
+        
+        bot.getLogUtil().sendCloseEmbed(tc, name, author, false, closer);
+        
     }
     
     public void addMember(TextChannel tc, Member member, Member executor){
+        PermissionOverride permission = tc.getPermissionOverride(member);
+        if(permission != null){
+            bot.getEmbedUtil().sendError(tc, executor.getUser(), "The provided member is already part of this Ticket.");
+            return;
+        }
+        
         tc.upsertPermissionOverride(member).setAllow(
                 Permission.MESSAGE_WRITE,
                 Permission.MESSAGE_EMBED_LINKS,
@@ -156,45 +182,44 @@ public class TicketManager {
                 "Adding member %s to ticket. Requested by %s",
                 member.getEffectiveName(),
                 executor.getEffectiveName()
-        )).queue();
+        )).queue(s -> {
+            MessageEmbed embed = bot.getEmbedUtil().getEmbed(executor.getUser())
+                    .setColor(0x00FF00)
+                    .setDescription(String.format(
+                            "Added %s to the Ticket!",
+                            member.getAsMention()
+                    ))
+                    .build();
+    
+            tc.sendMessage(embed).queue();
+        });
     }
     
     public void removeMember(TextChannel tc, Member member, Member executor){
         Member author = tc.getGuild().getMemberById(bot.getAuthor(tc.getId()));
         if(member.equals(author)){
-            MessageEmbed embed = bot.getEmbedUtil().getEmbed(executor.getUser())
-                    .setDescription(
-                            "The provided member is the author of this ticket.\n" +
-                            "You may not remove the ticket author from their ticket."
-                    )
-                    .setColor(0xFF0000)
-                    .build();
-    
-            tc.sendMessage(embed).queue();
+            bot.getEmbedUtil().sendError(
+                    tc,
+                    executor.getUser(),
+                    "The provided Member is the author of this Ticket.\n" +
+                    "You may not remove the Ticket-Author from their Ticket."
+            );
             return;
         }
         
         if(member.equals(tc.getGuild().getSelfMember())){
-            MessageEmbed embed = bot.getEmbedUtil().getEmbed(executor.getUser())
-                    .setDescription(
-                            "The provided member is the ticket-bot.\n" +
-                            "You may not remove the ticket-bot from a ticket."
-                    )
-                    .setColor(0xFF0000)
-                    .build();
-    
-            tc.sendMessage(embed).queue();
+            bot.getEmbedUtil().sendError(
+                    tc,
+                    executor.getUser(),
+                    "The provided member is the Ticket-Bot (Me).\n" +
+                    "You may not remove the Ticket-Bot from a ticket."
+            );
             return;
         }
         
         PermissionOverride permission = tc.getPermissionOverride(member);
         if(permission == null){
-            MessageEmbed embed = bot.getEmbedUtil().getEmbed(executor.getUser())
-                    .setDescription("The provided Member is not part of this channel!")
-                    .setColor(0xFF0000)
-                    .build();
-        
-            tc.sendMessage(embed).queue();
+            bot.getEmbedUtil().sendError(tc, executor.getUser(), "The provided Member is not part of this channel!");
             return;
         }
         
@@ -202,7 +227,17 @@ public class TicketManager {
                 "Removing member %s from ticket. Requested by %s",
                 member.getEffectiveName(),
                 executor.getEffectiveName()
-        )).queue();
+        )).queue(s -> {
+            MessageEmbed embed = bot.getEmbedUtil().getEmbed(executor.getUser())
+                    .setColor(0x00FF00)
+                    .setDescription(String.format(
+                            "Removed %s from the Ticket!",
+                            member.getAsMention()
+                    ))
+                    .build();
+    
+            tc.sendMessage(embed).queue();
+        });
     }
 
     private MessageEmbed getEmbed(String name, String reason, Member member){
@@ -213,7 +248,7 @@ public class TicketManager {
                         "```\n" +
                         "%s\n" +
                         "```",
-                        reason
+                        reason.length() > MessageEmbed.VALUE_MAX_LENGTH ? reason.substring(0, 1000) + "..." : reason
                 ), false)
                 .addField(
                         "Closing ticket:",

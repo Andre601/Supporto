@@ -59,56 +59,26 @@ public class ChannelListener extends ListenerAdapter{
     
         if(category != null){
             if(!guild.getSelfMember().hasPermission(category, Permission.MANAGE_CHANNEL)){
-                MessageEmbed embed = bot.getEmbedUtil()
-                        .getEmbed()
-                        .setColor(0xFF0000)
-                        .setDescription(String.format(
-                                "Could not create a ticket due to a lack of permissions!\n" +
-                                "\n" +
-                                "**Required permission**: `Manage Channel`\n" +
-                                "**Required in**: `Category %s`\n" +
-                                "\n" +
-                                "If you are an admin, make sure I have the permission in the mentioned channel/category.",
-                                category.getName()
-                        ))
-                        .build();
-    
-                tc.sendMessage(embed).queue(del -> del.delete().queueAfter(10, TimeUnit.SECONDS));
+                bot.getEmbedUtil().sendPermissionError(tc, member.getUser(), Permission.MANAGE_CHANNEL, category);
+                return;
             }
         }else{
             if(!guild.getSelfMember().hasPermission(Permission.MANAGE_CHANNEL)){
-                MessageEmbed embed = bot.getEmbedUtil().getEmbed()
-                        .setColor(0xFF0000)
-                        .setDescription(
-                                "Could not create a ticket due to a lack of permissions!\n" +
-                                "\n" +
-                                "**Required permission**: `Manage Channel`\n" +
-                                "\n" +
-                                "If you are an admin, make sure I have the permission in the guild."
-                        )
-                        .build();
-    
-                tc.sendMessage(embed).queue(del -> del.delete().queueAfter(10, TimeUnit.SECONDS));
+                bot.getEmbedUtil().sendPermissionError(tc, member.getUser(), Permission.MANAGE_CHANNEL, null);
                 return;
             }
         }
     
         if(!memberIsStaff(member, staff) && bot.getTicketManager().hasTicket(guild, member.getId())){
-            MessageEmbed embed = bot.getEmbedUtil().getEmbed()
-                    .setColor(0xFF0000)
-                    .setDescription(String.format(
-                            "You already have an open ticket!\n" +
-                            "Please either respond to it, or close it.\n" +
-                            "\n" +
-                            "**Your Ticket**: %s\n" +
-                            "\n" +
-                            "If the above mentioned channel reads \"Unknown Channel\", report it to the dev\n" +
-                            "of this bot!",
-                            bot.getTicketManager().getTicketMention(guild, member.getId())
-                    ))
-                    .build();
-        
-            tc.sendMessage(embed).queue(del -> del.delete().queueAfter(10, TimeUnit.SECONDS));
+            bot.getEmbedUtil().sendError(tc, member.getUser(), String.format(
+                    "You already have an open ticket!\n" + 
+                    "Please either respond to it, or close it.\n" +
+                    "\n" +
+                    "**Your Ticket**: %s\n" +
+                    "\n" +
+                    "If the above ticket shows as `Unknown Channel` report it to the developer of this bot!",
+                    bot.getTicketManager().getTicketMention(guild, member.getId())
+            ));
             return;
         }
     

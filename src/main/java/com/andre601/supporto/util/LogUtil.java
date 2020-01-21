@@ -14,7 +14,7 @@ public class LogUtil{
     
     public void sendOpenEmbed(TextChannel tc, String ticket, Member author){
         MessageEmbed embed = bot.getEmbedUtil().getEmbed()
-                .setTitle(Actions.TICKET_CLOSE.getMessage())
+                .setTitle(Actions.TICKET_CREATE.getMessage())
                 .addField("Ticket:", ticket, false)
                 .addField("Author:", getMember(author), false)
                 .build();
@@ -24,7 +24,7 @@ public class LogUtil{
     
     public void sendCloseEmbed(TextChannel tc, String ticket, Member author, boolean pm, @Nullable Member closer){
         MessageEmbed embed = bot.getEmbedUtil().getEmbed()
-                .setTitle(Actions.TICKET_CREATE.getMessage())
+                .setTitle(Actions.TICKET_CLOSE.getMessage())
                 .addField("Ticket:", ticket, false)
                 .addField("Author:", getMember(author), false)
                 .addField("Closed by:", closer == null ? getMember(author) : getMember(closer), false)
